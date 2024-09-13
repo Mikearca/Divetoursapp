@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <style>
+         body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            overflow: hidden;
+        }
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 25%;
+            left: 10%;
+            right: 10%;
+            z-index: 10;
+        }
+        .logoi {
+            max-width: 70%;
+            height: auto;
+        }
+        .circle {
+            border-radius: 50%;
+            position: absolute;
+            z-index: 5;
+            opacity: 0.8;
+            animation: levitate 10s ease-in-out infinite;
+        }
+        @keyframes levitate {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px); /* Ajusta el valor para mayor o menor "levitación" */
+            }
+        }
+        .circle1 {
+            top: 5%;
+            left: -4%;
+            width: 25vw;
+            height: 25vw;
+            background-color: #fb0301;
+        }
+        .circle2 {
+            top: 1%;
+            left: 86%;
+            width: 25vw;
+            height: 25vw;
+            background-color: #693c87;
+        }
+        .circle3 {
+            bottom: 76%;
+            right:30%;
+            width: 25vw;
+            height: 25vw;
+            background-color: #f46b01;
+        }
+        .circle4 {
+            top: 37%;
+            left: 76%;
+            width: 25vw;
+            height: 25vw;
+            background-color: #29a5de;
+        }
+        .circle5 {
+            top: 40%;
+            left: 10%;
+            width: 40vw;
+            height: 40vw;
+            background-color: #fcfe02;
+        }
+        .rounded-box {
+            position: absolute;
+            bottom: -10%; 
+            height: 40%;
+            width: 91%;
+            max-width: auto;
+            padding: 20px;
+            background-color: #CFA50B; 
+            border-radius: 40px;
+            border: 1px solid #101c1c;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+        }
+        .rounded-box p {
+            margin: 0;
+            color: #333;
+            font-size: 18px;
+            font-family: Arial, sans-serif;
+        }
+        .botones{
+            display: flex;
+            justify-content: space-around; /* Asegura que los botones estén uno al lado del otro con espacio */
+            align-items: center;
+            width: 100%; /* Ocupa todo el ancho disponible */
+            margin-top: 20px;
+        }
+        .button {
+            width: 48%;
+            height: 50px;
+            font-size: 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .button-black {
+            background-color: black;
+            color: white;
+        }
+
+        .button-white {
+            background-color: white;
+            color: black;
+        }
+    </style>
+     <script>
+        // Funciones para redirigir a otra vista
+        function goregis() {
+            window.location.href = "black_view.html"; // Cambia la URL a la vista que desees
+        }
+
+        function gologin() {
+            window.location.href = "white_view.html"; // Cambia la URL a la vista que desees
+        }
+    </script>
+</head>
+<body>
+    <div class="logo">
+        <img class="logoi" src="/divetoursapp/www/img/Divertours.jpg" alt="Logo">
+    </div>    
+    <div class="circle circle1"></div>
+    <div class="circle circle2"></div>
+    <div class="circle circle3"></div>
+    <div class="circle circle4"></div>
+    <div class="circle circle5"></div>
+    <div class="rounded-box">
+        <div class="textbox">
+            <p style="font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 150%;">
+                BIENVENIDOS
+            </p>
+            <p style="font-family: Arial, Helvetica, sans-serif; font-weight: lighter; text-align: justify; margin-top: 5%; margin-bottom: 15%;">
+                Esta es la app oficial de Divertours y tu guía de viaje personal. ¿Estás listo para viajar?
+            </p>
+        </div>
+        <div class="botones" >
+            <button class="button button-black" onclick="goregis()">Registrarme</button>
+            <button class="button button-white" onclick="gologin()">Iniciar Sesión</button>
+        </div>
+    </div>
+</body>
+</html>
