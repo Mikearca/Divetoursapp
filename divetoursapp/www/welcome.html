@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="/divetoursapp/www/css/index.css"> -->
     <title>Welcome</title>
     <style>
-         body, html {
+        .welcome, html {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -16,7 +17,7 @@
             background-color: #fff;
             overflow: hidden;
         }
-        .logo {
+        .logow {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -26,7 +27,7 @@
             right: 10%;
             z-index: 10;
         }
-        .logoi {
+        .logoww {
             max-width: 70%;
             height: auto;
         }
@@ -42,38 +43,38 @@
                 transform: translateY(0);
             }
             50% {
-                transform: translateY(-20px); /* Ajusta el valor para mayor o menor "levitación" */
+                transform: translateY(-20px);
             }
         }
-        .circle1 {
+        .circle1w {
             top: 5%;
             left: -4%;
             width: 25vw;
             height: 25vw;
             background-color: #fb0301;
         }
-        .circle2 {
+        .circle2w {
             top: 1%;
             left: 86%;
             width: 25vw;
             height: 25vw;
             background-color: #693c87;
         }
-        .circle3 {
+        .circle3w {
             bottom: 76%;
             right:30%;
             width: 25vw;
             height: 25vw;
             background-color: #f46b01;
         }
-        .circle4 {
+        .circle4w {
             top: 37%;
             left: 76%;
             width: 25vw;
             height: 25vw;
             background-color: #29a5de;
         }
-        .circle5 {
+        .circle5w {
             top: 40%;
             left: 10%;
             width: 40vw;
@@ -88,7 +89,7 @@
             max-width: auto;
             padding: 20px;
             background-color: #CFA50B; 
-            border-radius: 40px;
+            border-radius: 40px 40px 0 0;
             border: 1px solid #101c1c;
             text-align: center;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
@@ -99,11 +100,11 @@
             font-size: 18px;
             font-family: Arial, sans-serif;
         }
-        .botones{
+        .botonesw{
             display: flex;
-            justify-content: space-around; /* Asegura que los botones estén uno al lado del otro con espacio */
+            justify-content: space-around; 
             align-items: center;
-            width: 100%; /* Ocupa todo el ancho disponible */
+            width: 100%; 
             margin-top: 20px;
         }
         .button {
@@ -126,25 +127,29 @@
         }
     </style>
      <script>
-        // Funciones para redirigir a otra vista
+        document.addEventListener('deviceready', function() {
+            // Bloquear la orientación en vertical
+            screen.orientation.lock('portrait');
+        }, false);
+
         function goregis() {
-            window.location.href = "black_view.html"; // Cambia la URL a la vista que desees
+            window.location.href = "registro.html";
         }
 
         function gologin() {
-            window.location.href = "white_view.html"; // Cambia la URL a la vista que desees
+            window.location.href = "login.html";
         }
     </script>
 </head>
-<body>
-    <div class="logo">
-        <img class="logoi" src="/divetoursapp/www/img/Divertours.jpg" alt="Logo">
+<body class="welcome">
+    <div class="logow">
+        <img class="logoww" src="public/img/Divertours.jpg" alt="Logo">
     </div>    
-    <div class="circle circle1"></div>
-    <div class="circle circle2"></div>
-    <div class="circle circle3"></div>
-    <div class="circle circle4"></div>
-    <div class="circle circle5"></div>
+    <div class="circle circle1w"></div>
+    <div class="circle circle2w"></div>
+    <div class="circle circle3w"></div>
+    <div class="circle circle4w"></div>
+    <div class="circle circle5w"></div>
     <div class="rounded-box">
         <div class="textbox">
             <p style="font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 150%;">
@@ -154,7 +159,7 @@
                 Esta es la app oficial de Divertours y tu guía de viaje personal. ¿Estás listo para viajar?
             </p>
         </div>
-        <div class="botones" >
+        <div class="botonesw" >
             <button class="button button-black" onclick="goregis()">Registrarme</button>
             <button class="button button-white" onclick="gologin()">Iniciar Sesión</button>
         </div>

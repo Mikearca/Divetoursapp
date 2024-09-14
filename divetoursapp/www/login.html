@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de sesion</title>
+    <style>
+        .login{
+            background-image: url(public/img/INICIAR\ SESION-1.png);
+            background-size: cover; 
+            background-repeat: no-repeat; 
+            background-position: center; 
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f2f2f2;
+            background-color: #7C5597;
+            margin-top: 5%;
+        }
+
+        .header button {
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            background-color: #7C5597;
+        }
+
+        .header .back-btn {
+            font-size: 20px;
+            font-weight: bold;
+            background-color: #7C5597;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .content h1 {
+            font-size: 24px;
+            text-align: left;
+            width: 100%;
+            margin-bottom: -1px;
+            color: rgb(255, 255, 255);
+        }
+
+        .content p {
+            font-size: 16px;
+            text-align: justify;
+            color: rgb(255, 255, 255);
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        .content img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .cuadro {
+            position: absolute;
+            bottom: -10%; 
+            height: 55%;
+            width: 91%;
+            max-width: auto;
+            padding: 20px;
+            background-color: #ffb833; 
+            border-radius: 40px 40px 0 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+        }
+        .cuadro p {
+            margin: 0;
+            color: #ffffff;
+            font-size: 18px;
+            font-family: Arial, sans-serif;
+        }
+        .logimagen {
+            top: 50%;
+            width: 65vw;
+        }
+        .caja {
+            position: absolute;
+            top: 70%; 
+            left: 50%; 
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80%; 
+        }
+
+        .input-field {
+            width: 90%; 
+            padding: 15px;
+            margin-bottom: 2%;
+            background-color: #ffffff;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: rgb(0, 0, 0);
+            box-shadow: 0 4px 8px #00000033;
+        }
+
+        .input-field::placeholder {
+            color: rgba(0, 0, 0, 0.299); 
+            text-align: center;
+        }
+
+        .button {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background-color: #000000;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .button:hover {
+            background-color: #000000;
+        }
+
+        .olvida {
+            text-decoration: none; 
+            color: #7C5597; 
+            font-weight: bold; 
+            font-size: 90%; 
+            margin-bottom: 10%;
+        }
+
+        @media (max-width: 768px) {
+            .content h1 {
+                font-size: 20px;
+            }
+
+            .content p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body class="login">
+    <div class="header">
+        <button class="back-btn" style="font-size: 200%; font-weight: bold;" onclick="goBack()">←</button>
+        <button class="register-btn" style="font-size: 100%; font-weight: bold;" onclick="goregis()">Registrarme</button>
+    </div>
+
+    <div class="content">
+        <h1>Inicio de Sesión</h1>
+        <p style="font-size: 2vh;">
+            Si ya estás registrado, por favor ingresa tu correo electrónico y tu contraseña
+        </p>
+    </div>
+
+    <div class="caja">
+        <input type="email" class="input-field" placeholder="Correo electrónico">
+        <input type="password" class="input-field" placeholder="Contraseña">
+        <a class="olvida" href="">Olvide mi contraseña</a>
+        <button class="button btnin">Iniciar Sesión</button>
+    </div>
+
+    <script>
+        function goBack() {
+            window.location.href = "welcome.html";
+        }
+
+        function goregis() {
+            window.location.href = "registro.html"; 
+        }
+    </script>
+</body>
+</html>
