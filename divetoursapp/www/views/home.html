@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        .header {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 30vh;
+            background: white;
+            background: linear-gradient(to bottom, white 80%, rgba(102, 61, 133, 0));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; 
+        }
+
+        .header img.logo {
+            max-height: 40%;
+        }
+
+        .header button img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .main-content {
+            .main-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            color: white;
+            text-align: center;
+            background-color: none;
+            position: relative;
+            height: 100vh;
+        }
+
+        .main-content.visible {
+            opacity: 1;
+        }
+
+        .main-content.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .bienvenida {
+            width: 80%;
+            background-color: rgba(123, 85, 151, 0.75);
+            margin: -10% 0 15px; /* Posición más arriba sobre el header */
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        .bienvenida h2{
+            text-align: left;
+            margin: 0;
+            font-size: small;
+        }
+
+        .hola{
+            width: 70%;
+        }
+
+        .hola p {
+            text-align: center;
+            font-size: medium;
+
+        }
+
+        .card {
+            width: 80%;
+            background-color: white;
+            margin: 15px 0;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card-content {
+            color: #333;
+        }
+
+        #map {
+            height: 200px; /* Altura del mapa */
+            width: 100%; /* Ancho del mapa */
+            margin-top: 20px; /* Separación superior */
+            border-radius: 10px; /* Bordes redondeados */
+        }
+
+        /* Adaptabilidad */
+        @media (max-width: 768px) {
+            .card {
+                width: 80%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="../www/public/img/Divertours.jpg" alt="DIVERTOURS" class="logo">
+    </div>
+
+    <div class="main-content visible" id="home-content">
+        <div class="bienvenida">
+            <h2>Mi ubicacion</h2>
+            <div id="map"></div>
+        </div>
+        <div class="hola">
+            <h2>Hola de Nuevo</h2>
+            <p>Aqui tienes algunos de los lugares que hemos visitado</p>
+        </div>
+        <div class="card" onclick="alert('Abrir información de viaje pasado 2')">
+            <div class="card-content">
+                <h2>Viaje 2</h2>
+                <p>Detalles del viaje pasado 2</p>
+            </div>
+        </div>
+        <div class="card" onclick="alert('Abrir información de viaje pasado 3')">
+            <div class="card-content">
+                <h2>Viaje 3</h2>
+                <p>Detalles del viaje pasado 3</p>
+            </div>
+        </div>
+        <div class="card" onclick="alert('Abrir información de viaje pasado 1')">
+            <div class="card-content">
+                <h2>Viaje 1</h2>
+                <p>Detalles del viaje pasado 1</p>
+            </div>
+        </div>
+        <div class="card" onclick="alert('Abrir información de viaje pasado 2')">
+            <div class="card-content">
+                <h2>Viaje 2</h2>
+                <p>Detalles del viaje pasado 2</p>
+            </div>
+        </div>
+        <div class="card" onclick="alert('Abrir información de viaje pasado 3')">
+            <div class="card-content">
+                <h2>Viaje 3</h2>
+                <p>Detalles del viaje pasado 3</p>
+            </div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Inicializa el mapa
+        var map = L.map('map').setView([0, 0], 2); // Inicializa en una posición genérica
+    
+        // Capa de OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
+    
+        // Obtén la ubicación actual
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var lat = position.coords.latitude;
+                var lon = position.coords.longitude;
+    
+                // Actualiza el mapa a la ubicación actual
+                map.setView([lat, lon], 13);
+                L.marker([lat, lon]).addTo(map).bindPopup('Estás aquí').openPopup();
+            });
+        } else {
+            alert('La geolocalización no es compatible con este navegador.');
+        }
+    </script>
+    
+</body>
+</html>

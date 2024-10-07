@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplicación de Divertours</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+            background-color: #663D85;
+            overflow-x: hidden;
+        }
+
+        
+
+        /* Estilos para el cuadro centrado */
+        .cuadro-centro {
+            width: 95%;
+            max-width: 600px;
+            background-color: rgba(102, 61, 133, 0.7); /* Púrpura difuminado */
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            margin-top: 20px; /* Espacio superior para centrar */
+        }
+
+        .cuadro-centro h2 {
+            margin-bottom: 20px;
+        }
+
+        .cuadro-centro p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .cuadro-centro input,
+        .cuadro-centro button {
+            width: 80%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+        }
+
+        .cuadro-centro button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        .cuadro-centro a {
+            color: rgb(255, 255, 255);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        /* Barra de navegación fija */
+        .navbar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #101C1C;
+            border-radius: 10px;
+            width: 95%;
+            height: 8%;
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        .navbar button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            position: relative;
+            z-index: 101; /* Aseguramos que los botones estén por encima del cuadro */
+        }
+
+        .navbar img {
+            width: 6vh;
+            height: 6vh;
+            z-index: 101; /* Aseguramos que las imágenes estén por encima del cuadro */
+        }
+
+        /* Cuadro flotante detrás de los íconos seleccionados */
+        .highlight-box {
+            position: absolute;
+            width: 10vh; /* Tamaño del cuadro */
+            height: 10vh;
+            background-color: #101C1C; /* Fondo semitransparente */
+            border-radius: 10px; /* Redondear completamente */
+            z-index: 10; /* Aseguramos que esté detrás de las imágenes */
+            transition: all 0.5s ease;
+            pointer-events: none;
+            display: none; /* Oculto inicialmente */
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .header {
+                height: 25vh;
+            }
+
+            .navbar img {
+                width: 5vh;
+                height: 5vh;
+            }
+
+            .main-content {
+                font-size: 14px;
+            }
+
+            .highlight-box {
+                width: 15vw;
+                height: 20vw;
+            }
+        }
+
+        /* Ocultar y mostrar secciones */
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+    </style>
+</head>
+<body>
+    <!-- Contenedor principal para las vistas -->
+    <div class="main-content" id="main-content">
+        <!-- Aquí se cargará el contenido dinámico -->
+    </div>
+
+    <!-- Barra de navegación fija -->
+    <div class="navbar">
+        <button onclick="showSection('left', this)">
+            <img class="nave" src="../www/public/img/planner (1).png" alt="ITINERARIO">
+        </button>
+        <button onclick="showSection('home', this)">
+            <img class="nave" src="../www/public/img/home (2).png" alt="INICIO">
+        </button>
+        <button onclick="showSection('right', this)">
+            <img class="nave" src="../www/public/img/traveller (1).png" alt="CUENTA">
+        </button>
+    </div>
+
+    <!-- Cuadro flotante que sigue los íconos seleccionados -->
+    <div class="highlight-box" id="highlight-box"></div>
+
+    <!-- Script para manejar la carga dinámica de vistas -->
+    <script>
+        // Función para cargar vistas parciales dinámicamente
+        function showSection(viewName, buttonElement) {
+            const sections = document.querySelectorAll('.main-content');
+            const mainContent = document.querySelector('.main-content');
+            
+            // Ocultar todas las secciones
+            sections.forEach(section => {
+                section.classList.add('hidden');
+                section.classList.remove('visible');
+            });
+
+            // Cargar la vista parcial
+            fetch(`views/${viewName}.html`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al cargar la vista parcial');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    mainContent.innerHTML = data;
+                    mainContent.classList.add('visible');
+                    mainContent.classList.remove('hidden');
+
+                    // Mover el cuadro de highlight detrás del botón seleccionado
+                    const rect = buttonElement.getBoundingClientRect();
+                    const highlightBox = document.getElementById('highlight-box');
+                    highlightBox.style.top = `${rect.top + window.scrollY - (highlightBox.offsetHeight / 2) + (rect.height / 2)}px`;
+                    highlightBox.style.left = `${rect.left + window.scrollX - (highlightBox.offsetWidth / 2) + (rect.width / 2)}px`;
+                    highlightBox.style.display = 'block'; // Mostrar el cuadro cuando se selecciona una vista
+                })
+                .catch(error => {
+                    console.error('Error al cargar la vista parcial:', error);
+                });
+        }
+
+        // Inicializar la vista principal al cargar la página
+        window.onload = function() {
+            showSection('home', document.querySelector('.navbar button:nth-child(2)')); // Cargar la vista de inicio
+        };
+    </script>
+</body>
+</html>
