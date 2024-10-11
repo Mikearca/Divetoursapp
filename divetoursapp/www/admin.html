@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aplicación de Divertours</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <style>
         body, html {
             margin: 0;
@@ -132,9 +130,7 @@
             opacity: 1;
             pointer-events: all;
         }
-
     </style>
-    
 </head>
 <body>
     <div class="main-content" id="main-content">
@@ -155,15 +151,18 @@
     <div class="highlight-box" id="highlight-box"></div>
 
     <script>
+        // Función para cargar vistas parciales dinámicamente
         function showSection(viewName, buttonElement) {
             const sections = document.querySelectorAll('.main-content');
             const mainContent = document.querySelector('.main-content');
             
+            // Ocultar todas las secciones
             sections.forEach(section => {
                 section.classList.add('hidden');
                 section.classList.remove('visible');
             });
 
+            // Cargar la vista parcial
             fetch(`views/${viewName}.html`)
                 .then(response => {
                     if (!response.ok) {
@@ -176,14 +175,16 @@
                     mainContent.classList.add('visible');
                     mainContent.classList.remove('hidden');
 
+                    // Mover el cuadro de highlight detrás del botón seleccionado
                     const rect = buttonElement.getBoundingClientRect();
                     const highlightBox = document.getElementById('highlight-box');
                     highlightBox.style.top = `${rect.top + window.scrollY - (highlightBox.offsetHeight / 2) + (rect.height / 2)}px`;
                     highlightBox.style.left = `${rect.left + window.scrollX - (highlightBox.offsetWidth / 2) + (rect.width / 2)}px`;
-                    highlightBox.style.display = 'block';
+                    highlightBox.style.display = 'block'; // Mostrar el cuadro cuando se selecciona una vista
 
+                    // Inicializar el mapa si se ha cargado la vista 'home'
                     if (viewName === 'home') {
-                        initializeMap(); 
+                        initializeMap(); // Llama la función que inicializa el mapa
                     }
 
                 })
@@ -192,42 +193,40 @@
                 });
         }
 
-        function initializeMap() {
-            const mapElement = document.getElementById('map');
-            if (mapElement) {
-                var map = L.map('map', {
-                    zoomControl: false 
-                }).setView([51.505, -0.09], 13);
+        // Función para inicializar el mapa de Leaflet
+function initializeMap() {
+    const mapElement = document.getElementById('map');
+    if (mapElement) {
+        // Inicializar el mapa si el div está presente
+        var map = L.map('map').setView([51.505, -0.09], 13);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
 
-                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    maxZoom: 19,
-                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                }).addTo(map);
+        navigator.geolocation.watchPosition(success, error);
+    } else {
+        console.error('El div del mapa no existe o no se ha cargado correctamente.');
+    }
+}
 
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function(position) {
-                        const lat = position.coords.latitude;
-                        const lng = position.coords.longitude;
-
-                        map.setView([lat, lng], 13);
-
-                        var marker = L.marker([lat, lng]).addTo(map)
-                            .bindPopup("¡Estás aquí!")
-                            .openPopup();
-                    }, function(error) {
-                        console.warn('ERROR(' + error.code + '): ' + error.message);
-                    });
-                } else {
-                    console.error("El navegador no soporta la geolocalización.");
-                }
-            } else {
-                console.error('El div del mapa no existe o no se ha cargado correctamente.');
-            }
+        // Función de éxito para geolocalización
+        function success(pos) {
+            const crd = pos.coords;
+            console.log('Tu ubicación actual es:');
+            console.log(`Latitud : ${crd.latitude}`);
+            console.log(`Longitud: ${crd.longitude}`);
+            console.log(`Más o menos ${crd.accuracy} metros.`);
         }
 
+        // Función de error para geolocalización
+        function error(err) {
+            console.warn(`ERROR(${err.code}): ${err.message}`);
+        }
 
+        // Inicializar la vista principal al cargar la página
         window.onload = function() {
-            showSection('home', document.querySelector('.navbar button:nth-child(2)'));
+            showSection('home', document.querySelector('.navbar button:nth-child(2)')); // Cargar la vista de inicio
         };
     </script>
 </body>

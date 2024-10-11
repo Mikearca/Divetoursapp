@@ -151,6 +151,24 @@
             margin-bottom: 10%;
         }
 
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden; /* Oculto por defecto */
+        }
+        .loading img {
+            width: 50px; /* Ajusta según necesites */
+            height: 50px; /* Ajusta según necesites */
+        }
+
         @media (max-width: 768px) {
             .content h1 {
                 font-size: 20px;
@@ -176,13 +194,52 @@
     </div>
 
     <div class="caja">
-        <input type="email" class="input-field" placeholder="Correo electrónico">
-        <input type="password" class="input-field" placeholder="Contraseña">
-        <a class="olvida" href="">Olvide mi contraseña</a>
-        <button class="button btnin">Iniciar Sesión</button>
+        <input type="email" id="email" class="input-field" placeholder="Correo electrónico" required>
+        <input type="password" id="password" class="input-field" placeholder="Contraseña" required>
+        <a class="olvida" href="#">Olvidé mi contraseña</a>
+        <button class="button btnin" onclick="login()">Iniciar Sesión</button>
     </div>
 
     <script>
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('http://localhost:4000/users/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                // Captura la respuesta JSON
+                const data = await response.json();
+                console.log(data); // Para verificar la respuesta del servidor
+
+                if (response.ok) {
+
+                    // Almacena el rol para la redirección
+                    const role = data.rol; 
+
+                    // Redirige después de un breve retraso para mostrar la carga
+                    setTimeout(() => {
+                        if (role === 'admin') {
+                            window.location.href = 'admin.html'; 
+                        } else if (role === 'user') {
+                            window.location.href = 'inicio.html'; 
+                        }
+                    }, 2000);
+                } else {
+                    alert(data.message || 'Credenciales incorrectas. Intente de nuevo.');
+                }
+            } catch (error) {
+                console.error('Error al iniciar sesión:', error);
+                alert('Error en el servidor. Intente de nuevo más tarde.');
+            }
+        }
+
         function goBack() {
             window.location.href = "welcome.html";
         }

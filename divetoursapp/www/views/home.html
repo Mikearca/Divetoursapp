@@ -4,20 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
     <style>
         .header {
             top: 0;
             left: 0;
             width: 100%;
-            height: 30vh;
+            height: 20vh;
             background: white;
             background: linear-gradient(to bottom, white 80%, rgba(102, 61, 133, 0));
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000; 
+            z-index: 1000;
         }
 
         .header img.logo {
@@ -30,7 +34,6 @@
         }
 
         .main-content {
-            .main-content {
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
@@ -54,13 +57,12 @@
         .bienvenida {
             width: 80%;
             background-color: rgba(123, 85, 151, 0.75);
-            margin: -10% 0 15px; /* Posición más arriba sobre el header */
+            margin: 15px 0;
             border-radius: 15px;
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease;
-            position: relative;
         }
+        
         .bienvenida h2{
             text-align: left;
             margin: 0;
@@ -79,45 +81,82 @@
 
         .card {
             width: 80%;
-            background-color: white;
+            position: relative; /* Necesario para la superposición de lugar */
+            background-color: rgba(123, 85, 151, 0.75);
             margin: 15px 0;
             border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            overflow: hidden; /* Asegura que las imágenes no se salgan del div card */
             cursor: pointer;
             transition: transform 0.3s ease;
+            height: 300px; 
+        }
+
+        .card-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
         }
 
         .card:hover {
             transform: scale(1.05);
         }
 
-        .card-content {
-            color: #333;
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .lugar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: rgb(123, 85, 151); /* Fondo semi-transparente */
+            border-radius: 15px;
+            padding: 10px;
+            writing-mode: vertical-rl; /* Texto en vertical */
+            text-align: center;
+            font-size: 1.2em;
+            width: 20%; /* Ajustar según lo que consideres adecuado */
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lugar h2 {
+            font-size:large ;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .footer {
+            height: 100vh;
+            width: auto;
         }
 
         #map {
-            height: 200px; /* Altura del mapa */
-            width: 100%; /* Ancho del mapa */
-            margin-top: 20px; /* Separación superior */
-            border-radius: 10px; /* Bordes redondeados */
+            height: 200px;
+            width: 100%;
+            margin-top: 20px;
+            border-radius: 10px;
         }
 
-        /* Adaptabilidad */
         @media (max-width: 768px) {
             .card {
                 width: 80%;
+                height: 100%;
             }
         }
 
     </style>
 </head>
 <body>
-    <div class="header">
-        <img src="../www/public/img/Divertours.jpg" alt="DIVERTOURS" class="logo">
-    </div>
-
+    
     <div class="main-content visible" id="home-content">
+        <div class="header">
+            <img src="../www/public/img/Divertours.jpg" alt="DIVERTOURS" class="logo">
+        </div>
         <div class="bienvenida">
             <h2>Mi ubicacion</h2>
             <div id="map"></div>
@@ -126,60 +165,45 @@
             <h2>Hola de Nuevo</h2>
             <p>Aqui tienes algunos de los lugares que hemos visitado</p>
         </div>
-        <div class="card" onclick="alert('Abrir información de viaje pasado 2')">
+        <div class="card" onclick="">
             <div class="card-content">
-                <h2>Viaje 2</h2>
-                <p>Detalles del viaje pasado 2</p>
+                <div class="lugar">
+                    <h2>Mazatlan</h2>
+                </div>
+                <img src="../public/img/mazatlan.jpg" alt="mazatlan">
             </div>
         </div>
-        <div class="card" onclick="alert('Abrir información de viaje pasado 3')">
+        <div class="card" onclick="">
             <div class="card-content">
-                <h2>Viaje 3</h2>
-                <p>Detalles del viaje pasado 3</p>
+                <div class="lugar">
+                    <h2>Oaxaca</h2>
+                </div>
+                <img src="../public/img/oaxaca.jpeg" alt="Oaxaca">
             </div>
         </div>
-        <div class="card" onclick="alert('Abrir información de viaje pasado 1')">
+        <div class="card" onclick="">
             <div class="card-content">
-                <h2>Viaje 1</h2>
-                <p>Detalles del viaje pasado 1</p>
+                <div class="lugar">
+                    <h2>Chihuahua</h2>
+                </div>
+                <img src="../public/img/chihuahua.jpg" alt="Chihuahua">
             </div>
         </div>
-        <div class="card" onclick="alert('Abrir información de viaje pasado 2')">
+        <div class="card" onclick="">
             <div class="card-content">
-                <h2>Viaje 2</h2>
-                <p>Detalles del viaje pasado 2</p>
+                <div class="lugar">
+                    <h2>Puebla</h2>
+                </div>
+                <img src="../public/img/puebla.jpg" alt="Puebla">
             </div>
         </div>
-        <div class="card" onclick="alert('Abrir información de viaje pasado 3')">
-            <div class="card-content">
-                <h2>Viaje 3</h2>
-                <p>Detalles del viaje pasado 3</p>
-            </div>
-        </div>
+
+    </div>
+    <div class="footer">
     </div>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        // Inicializa el mapa
-        var map = L.map('map').setView([0, 0], 2); // Inicializa en una posición genérica
-    
-        // Capa de OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-        }).addTo(map);
-    
-        // Obtén la ubicación actual
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                var lat = position.coords.latitude;
-                var lon = position.coords.longitude;
-    
-                // Actualiza el mapa a la ubicación actual
-                map.setView([lat, lon], 13);
-                L.marker([lat, lon]).addTo(map).bindPopup('Estás aquí').openPopup();
-            });
-        } else {
-            alert('La geolocalización no es compatible con este navegador.');
-        }
+        initializeMap(); 
     </script>
     
 </body>

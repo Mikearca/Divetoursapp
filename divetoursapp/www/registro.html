@@ -162,34 +162,69 @@
 </style>
 </head>
 
-<body class="regis">
-  <div class="header">
-    <button class="back-btn" style="font-size: 200%; font-weight: bold;" onclick="back()">←</button>
-    <button class="register-btn" style="font-size: 100%; font-weight: bold;" onclick="golog()">Iniciar sesión</button>
-</div>
+<body>
+    <div class="header">
+      <button class="back-btn" style="font-size: 200%; font-weight: bold;" onclick="back()">←</button>
+      <button class="register-btn" style="font-size: 100%; font-weight: bold;" onclick="golog()">Iniciar sesión</button>
+  </div>
+  
+  <div class="content">
+      <h1>Registrarme</h1>
+      <p style="font-size: 2vh;">
+        Regístrate para acceder a increíbles destinos y experiencias memorables
+      </p>
+  </div>
+  
+  <div class="caja">
+      <input type="text" id="name" class="input-field" placeholder="Nombre" required>
+      <input type="text" id="last_name" class="input-field" placeholder="Apellido" required>
+      <input type="email" id="email" class="input-field" placeholder="Correo electrónico" required>
+      <input type="password" id="password" class="input-field" placeholder="Contraseña" required>
+      <button class="button" onclick="register()">Registrarme</button>
+      <div class="error-message" id="error-message"></div>
+  </div>
+  
+  <script>
+      function back() {
+          window.location.href = "welcome.html";
+      }
+  
+      function golog() {
+          window.location.href = "login.html"; 
+      }
 
-<div class="content">
-    <h1>Registrarme</h1>
-    <p style="font-size: 2vh;">
-      Regístrate para acceder a increíbles destinos y experiencias memorables
-    </p>
-</div>
+      async function register() {
+          const name = document.getElementById("name").value;
+          const lastName = document.getElementById("last_name").value;
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
 
-<div class="caja">
-    <input type="email" class="input-field" placeholder="Correo electrónico">
-    <input type="password" class="input-field" placeholder="Contraseña">
-    <input type="password" class="input-field" placeholder="Contraseña">
-    <button class="button btnin">Registrarme</button>
-</div>
+          const errorMessageDiv = document.getElementById("error-message");
+          errorMessageDiv.textContent = ''; // Resetea el mensaje de error
 
-<script>
-    function back() {
-        window.location.href = "welcome.html";
-    }
+          try {
+              const response = await fetch("http://localhost:4000/users/register", {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({ name, last_name: lastName, email, password })
+              });
 
-    function golog() {
-        window.location.href = "login.html"; 
-    }
-</script>
+              // Verifica si la respuesta es válida
+              if (!response.ok) {
+                  const result = await response.json();
+                  throw new Error(result.message || "Error en el registro. Intenta de nuevo.");
+              }
+
+              // Redirigir al login si el registro es exitoso
+              golog();
+          } catch (error) {
+              // Mostrar mensaje de error
+              errorMessageDiv.textContent = error.message;
+          }
+      }
+  </script>
+</body>
 </body>
 </html>
