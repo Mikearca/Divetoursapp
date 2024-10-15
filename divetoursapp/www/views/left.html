@@ -3,11 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Itinerario de Viaje</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center; /* Centra horizontalmente */
+            align-items: center; /* Centra verticalmente */
+            height: 100vh; /* Altura de la pantalla */
+            margin: 0;
+            background-color: none; /* Color de fondo */
+        }
+
+        .container {
+            width: 90%; /* Ancho del 90% de la pantalla */
+            max-width: 300px; /* Limita el ancho máximo del cuadro */
+            background-color: rgba(123, 85, 151, 0.9); /* Color de fondo del cuadro */
+            border-radius: 15px; /* Bordes redondeados */
+            padding: 20px; /* Espaciado interno */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+            display: flex; /* Para centrar el contenido */
+            flex-direction: column; /* Coloca los elementos en una columna */
+            align-items: center; /* Centra horizontalmente los elementos */
+        }
+
+        .title {
+            text-align: center; /* Texto centrado */
+            font-size: 24px; /* Tamaño del título */
+            color: white; /* Color del texto */
+            margin-bottom: 15px; /* Espacio debajo del título */
+        }
+
+        .description {
+            text-align: justify; /* Texto justificado */
+            color: white; /* Color del texto */
+            margin-bottom: 20px; /* Espacio debajo del párrafo */
+        }
+
+        .input {
+            width: 82%; /* Ancho del input (puedes ajustarlo) */
+            padding: 10px; /* Espaciado interno */
+            border-radius: 20px; /* Bordes redondeados */
+            border: 1px solid #ccc; /* Borde */
+            margin-bottom: 15px; /* Espacio debajo del input */
+            font-size: 16px; /* Tamaño del texto */
+            text-align: center; /* Centra el texto dentro del input */
+        }
+
+        .button {
+            width: 90%; /* Ancho del botón igual que el input */
+            padding: 10px; /* Espaciado interno */
+            border-radius: 20px; /* Bordes redondeados */
+            border: none; /* Sin borde */
+            background-color: #281C31; /* Color de fondo del botón */
+            color: white; /* Color del texto del botón */
+            font-size: 16px; /* Tamaño del texto del botón */
+            cursor: pointer; /* Cambia el cursor al pasar el mouse */
+            transition: background-color 0.3s; /* Transición suave */
+        }
+
+        .button:hover {
+            background-color: #2d243a; /* Color del botón al pasar el mouse */
+        }
+    </style>
 </head>
 <body>
-    <h1>Vista izquierda</h1>
-    <p>Aquí estará el contenido de la vista lateral izquierda.</p>
-
+    <div class="container">
+        <h1 class="title">Itinerario de Viaje</h1>
+        <p class="description">Para ver el itinerario debe estar inscrito a un viaje. Por favor ingresa o escanea el código de viaje.</p>
+        <input type="text" class="input" placeholder="Ingresa código">
+        <button class="button">Inscribirme</button>
+    </div>
 </body>
 </html>

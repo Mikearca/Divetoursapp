@@ -16,6 +16,13 @@
             align-items: center;
         }
 
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%; /* Para que ocupe todo el ancho de la pantalla */
+        }
+
         /* Cuadro centrado con los datos del usuario */
         .user-info {
             display: flex;
@@ -39,15 +46,18 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            color: #ffffff; /* Color del texto de nombre y apellido */
         }
 
-        .user-info h3, .user-info p {
+        .user-info h3 {
             margin: 0;
-            color: #000000;
+            font-size: 1.5rem; /* Tamaño grande para el nombre y apellido */
         }
 
         .user-info p {
-            color: #ffffff;
+            color: #007BFF; /* Color azul para el correo */
+            font-size: 1rem; /* Tamaño más pequeño para el correo */
+            margin: 5px 0 0; /* Espacio superior para el correo */
         }
 
         /* Cuadro para notificaciones */
@@ -68,65 +78,71 @@
             color: #000000;
         }
 
-        .notifications ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .notifications ul li {
+        .notifications .aviso {
             background-color: rgb(123, 85, 151);
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .notifications .aviso h3 {
+            margin: 0;
+            color: #ffffff;
+            font-size: 1.2rem;
+            margin-bottom: 10px; 
+        }
+
+        .notifications .aviso p {
+            color: #ffffff;
+            text-align: justify;
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Cuadro de información del usuario -->
-    <div class="user-info">
-        <img src="../public/img/traveller.png" alt="Usuario">
-        <div>
-            <h3 id="user-name"></h3>
-            <p id="user-email"></p>
+    <div class="container">
+        <!-- Cuadro de información del usuario -->
+        <div class="user-info">
+            <img src="../public/img/traveller.png" alt="Usuario">
+            <div>
+                <h3 id="user-name"></h3>
+                <p id="user-email"></p>
+            </div>
+        </div>
+    
+        <!-- Cuadro de notificaciones -->
+        <div class="notifications">
+            <h2>Notificaciones</h2>
+            <div class="avisos" id="avisos"></div>
+
         </div>
     </div>
 
-    <!-- Cuadro de notificaciones -->
-    <div class="notifications">
-        <h2>Notificaciones</h2>
-    </div>
-
     <script>
-        // Función para obtener los datos del usuario desde el servidor
-        async function showUser() {
-            try {
-                // Hacer una solicitud GET al servidor para obtener los datos del usuario
-                const idUsuario = localStorage.getItem('id');
-                const response = await fetch(`http://localhost:4000/users/users/${id}`);
-                
-                // Verificar si la respuesta es exitosa
-                if (response.ok) {
-                    const usuario = await response.json(); // Convertir la respuesta en JSON
+        // Recibir los avisos enviados desde la vista principal
+        window.addEventListener('message', (event) => {
+            const avisos = event.data;
+            const notificationsContainer = document.querySelector('.notifications');
 
-                    // Obtener los elementos del DOM
-                    const nombreUsuario = document.getElementById('user-name');
-                    const emailUsuario = document.getElementById('user-email');
+            avisos.forEach(aviso => {
+                const avisoElement = document.createElement('div');
+                avisoElement.classList.add('aviso');
 
-                    // Asignar los datos obtenidos a los elementos del DOM
-                    nombreUsuario.textContent = `${usuario.name} ${usuario.last_name}`;
-                    emailUsuario.textContent = usuario.email;
-                } else {
-                    console.error("Error al obtener los datos del usuario:", response.status);
-                }
-            } catch (error) {
-                console.error("Error en la solicitud:", error);
-            }
-        }
+                const avisoName = document.createElement('h3');
+                avisoName.textContent = aviso.avi_name;
+                avisoElement.appendChild(avisoName);
 
-        // Ejecutar showUser cuando se cargue la página
-        document.addEventListener('DOMContentLoaded', showUser);
+                const avisoDescription = document.createElement('p');
+                avisoDescription.textContent = aviso.avi_description;
+                avisoElement.appendChild(avisoDescription);
+
+                notificationsContainer.appendChild(avisoElement);
+            });
+        });
+
     </script>
 
 </body>

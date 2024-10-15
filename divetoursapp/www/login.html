@@ -221,6 +221,7 @@
                 if (response.ok) {
 
                     // Almacena el rol para la redirección
+                    localStorage.setItem('userId', data.userId);
                     const role = data.rol; 
 
                     // Redirige después de un breve retraso para mostrar la carga
