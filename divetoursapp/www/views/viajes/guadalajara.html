@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guadalajara - Divertours</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            background-color: #663D85;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            position: relative;
+        }
+
+        .back-arrow {
+            font-size: 24px;
+            color: #ffffff;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        h5 {
+            font-size: 20px;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .main-image {
+            width: 100%;
+            height: auto;
+            max-width: 400px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        /* Contenedor para el texto, con fondo suave */
+        .description-container {
+            background-color: rgba(0, 0, 0, 0.4); /* Fondo oscuro pero suave */
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+
+        .description {
+            text-align: justify;
+            font-size: 16px;
+            color: #ffffff;
+        }
+
+        .spaced {
+            margin: 15px 0;
+        }
+
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .image-preview-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-preview-overlay img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+
+        .image-preview-overlay.visible {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="javascript:history.back()" class="back-arrow">←</a>
+        <h5>GUADALAJARA</h5>
+    </div>
+
+    <img src="../../public/img/guadalajara.jpg" alt="Guadalajara" class="main-image fade-in">
+
+    <div class="description-container fade-in">
+        <p class="description">Guadalajara, la capital de Jalisco, es un destino lleno de historia, cultura y tradiciones. Comenzamos nuestra aventura visitando Tequila, el lugar de origen de la famosa bebida, y exploramos las plantaciones de agave que rodean este pintoresco pueblo.</p>
+
+        <div class="image-gallery spaced">
+            <img src="../../public/img/tq1.jpg" alt="Tequila" class="gallery-image">
+            <img src="../../public/img/tq2.jpg" alt="Mazamitla" class="gallery-image">
+        </div>
+
+        <p class="description">En Mazamitla, nos adentramos en las montañas para disfrutar de paisajes boscosos y una atmósfera tranquila, ideal para relajarse y disfrutar de la naturaleza.</p>
+
+        <div class="image-gallery spaced">
+            <img src="../../public/img/g3.jpg" alt="Mazamitla" class="gallery-image">
+            <img src="../../public/img/g5.jpg" alt="Mazamitla" class="gallery-image">
+        </div>
+
+        <p class="description">Finalmente, en la ciudad de Guadalajara, exploramos su centro histórico, la famosa Plaza de los Mariachis, y la majestuosa Catedral. El mariachi y el tequila son parte de su alma, y disfrutamos de la vibrante vida nocturna.</p>
+
+        <div class="image-gallery spaced">
+            <img src="../../public/img/g1.jpg" alt="Guadalajara" class="gallery-image">
+            <img src="../../public/img/g2.jpg" alt="Guadalajara" class="gallery-image">
+        </div>
+
+        <p class="description">Guadalajara, Tequila y Mazamitla nos dejaron recuerdos imborrables, y sin duda, es un destino que recomendamos para todos los viajeros en busca de cultura y naturaleza.</p>
+    </div>
+
+    <!-- Overlay para la previsualización de la imagen -->
+    <div class="image-preview-overlay" id="imagePreviewOverlay">
+        <img id="previewImage" src="" alt="Preview">
+    </div>
+
+    <script>
+        // Configuración de Intersection Observer para animación de desvanecimiento
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        });
+
+        // Seleccionar todos los elementos con la clase 'fade-in'
+        const fadeElements = document.querySelectorAll('.fade-in');
+        fadeElements.forEach(el => observer.observe(el));
+
+        // Lógica para previsualización de imágenes
+        const imageGallery = document.querySelectorAll('.gallery-image');
+        const overlay = document.getElementById('imagePreviewOverlay');
+        const previewImage = document.getElementById('previewImage');
+
+        imageGallery.forEach(img => {
+            img.addEventListener('click', () => {
+                previewImage.src = img.src;
+                overlay.classList.add('visible');
+            });
+        });
+
+        // Cerrar el overlay al hacer clic en cualquier parte de la pantalla
+        overlay.addEventListener('click', () => {
+            overlay.classList.remove('visible');
+        });
+    </script>
+</body>
+</html>

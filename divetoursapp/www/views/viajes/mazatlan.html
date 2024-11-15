@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mazatlán - Divertours</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            background-color: #663D85;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            position: relative;
+        }
+
+        .back-arrow {
+            font-size: 24px;
+            color: #ffffff;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        h5 {
+            font-size: 20px;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .main-image {
+            width: 100%;
+            height: auto;
+            max-width: 400px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        /* Contenedor de descripción con el nuevo fondo */
+        .description {
+            background-color: rgba(0, 0, 0, 0.4); /* Fondo con el color solicitado */
+            text-align: justify;
+            padding: 15px;
+            font-size: 16px;
+            color: #ffffff;
+            margin-bottom: 20px;
+            max-width: 400px;
+            border-radius: 10px; /* Bordes redondeados */
+        }
+
+        .spaced {
+            margin: 15px 0;
+        }
+
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        /* Estilos para el overlay de previsualización */
+        .image-preview-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-preview-overlay img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+
+        .image-preview-overlay.visible {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="javascript:history.back()" class="back-arrow">←</a>
+        <h5>MAZATLÁN</h5>
+    </div>
+
+    <img src="../../public/img/mazatlan.jpg" alt="Mazatlán" class="main-image fade-in">
+
+    <div class="description fade-in">
+        <p>Mazatlán, la perla del Pacífico, nos recibió con sus hermosas playas y atardeceres inolvidables. La calidez de su gente y la belleza de sus paisajes hicieron de este viaje una experiencia única. Iniciamos nuestra aventura recorriendo el Malecón, uno de los más largos del mundo, con vistas espectaculares al océano.</p>
+
+        <div class="image-gallery spaced">
+            <img src="../../public/img/m1.jpeg" alt="Imagen 1" class="gallery-image">
+            <img src="../../public/img/m2.jpg" alt="Imagen 2" class="gallery-image">
+        </div>
+
+        <p>No podíamos dejar de explorar el Centro Histórico, donde las coloridas fachadas y la arquitectura colonial nos transportaron al pasado. Los viajeros quedaron encantados al descubrir la Catedral de Mazatlán y sus calles llenas de vida y cultura.</p>
+
+        <div class="image-gallery spaced">
+            <img src="../../public/img/m3.jpg" alt="Imagen 3" class="gallery-image">
+            <img src="../../public/img/m4.jpg" alt="Imagen 4" class="gallery-image">
+        </div>
+
+        <p>Cerramos nuestro recorrido con una visita al acuario, para contemplar la belleza del fondo del mar. Mazatlán nos regaló momentos inolvidables, y nos llevamos recuerdos que atesoraremos siempre. ¡Te esperamos en la próxima aventura!</p>
+    </div>
+
+    <!-- Overlay para la previsualización de la imagen -->
+    <div class="image-preview-overlay" id="imagePreviewOverlay">
+        <img id="previewImage" src="" alt="Preview">
+    </div>
+
+    <script>
+        // Configuración de Intersection Observer para animación de desvanecimiento
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        });
+
+        // Seleccionar todos los elementos con la clase 'fade-in'
+        const fadeElements = document.querySelectorAll('.fade-in');
+        fadeElements.forEach(el => observer.observe(el));
+
+        // Lógica para previsualización de imágenes
+        const imageGallery = document.querySelectorAll('.gallery-image');
+        const overlay = document.getElementById('imagePreviewOverlay');
+        const previewImage = document.getElementById('previewImage');
+
+        imageGallery.forEach(img => {
+            img.addEventListener('click', () => {
+                previewImage.src = img.src;
+                overlay.classList.add('visible');
+            });
+        });
+
+        // Cerrar el overlay al hacer clic en cualquier parte de la pantalla
+        overlay.addEventListener('click', () => {
+            overlay.classList.remove('visible');
+        });
+    </script>
+</body>
+</html>

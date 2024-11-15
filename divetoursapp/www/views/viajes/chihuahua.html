@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chihuahua - Divertours</title>
+    <style>
+        /* Estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            background-color: #663D85;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            position: relative;
+        }
+
+        /* Flecha de regreso */
+        .back-arrow {
+            font-size: 24px;
+            color: #ffffff;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* Título */
+        h5 {
+            font-size: 20px;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        /* Animaciones de desvanecimiento */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Imagen principal en la parte superior */
+        .main-image {
+            width: 100%;
+            height: auto;
+            max-width: 400px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        /* Contenedor con fondo suave para el texto */
+        .text-container {
+            background-color: rgba(0, 0, 0, 0.4); /* Fondo blanco translúcido */
+            border-radius: 10px;
+            padding: 15px;
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+
+        /* Texto descriptivo */
+        .description {
+            text-align: justify;
+            font-size: 16px;
+            color: #ffffff; /* Color oscuro para el texto */
+        }
+
+        /* Espaciado entre párrafos e imágenes */
+        .spaced {
+            margin: 15px 0;
+        }
+
+        /* Galería de imágenes adicionales */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        /* Overlay para la vista previa de imágenes */
+        .preview-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .preview-overlay img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header con flecha de regreso y título -->
+    <div class="header">
+        <a href="javascript:history.back()" class="back-arrow">←</a>
+        <h5>CHIHUAHUA</h5>
+    </div>
+
+    <!-- Imagen principal -->
+    <img src="../../public/img/chihuahua.jpg" alt="Chihuahua" class="main-image fade-in">
+
+    <!-- Contenedor de texto con fondo suave -->
+    <div class="text-container fade-in">
+        <p class="description">Nuestro último viaje a Chihuahua fue increíble. Cada rincón de este lugar nos dejó sin palabras, especialmente el recorrido por el Cañón del Cobre, ¡una de las maravillas naturales de México! Nos aventuramos en el famoso tren El Chepe, que atraviesa paisajes que parecen sacados de un sueño.</p>
+
+        <!-- Imágenes entre párrafos -->
+        <div class="image-gallery spaced">
+            <img src="../../public/img/ch3.jpg" alt="Imagen 1" class="gallery-image">
+            <img src="../../public/img/ch4.jpg" alt="Imagen 2" class="gallery-image">
+        </div>
+
+        <p class="description">La estancia en Creel fue otra experiencia mágica; el contacto con la comunidad Rarámuri y conocer su cultura tan de cerca nos hizo valorar aún más la riqueza cultural de nuestro país. Los viajeros estuvieron encantados y aprendieron muchísimo mientras explorábamos juntos los miradores y cascadas de la región.</p>
+
+        <!-- Imágenes entre párrafos -->
+        <div class="image-gallery spaced">
+            <img src="../../public/img/ch5.jpg" alt="Imagen 3" class="gallery-image">
+            <img src="../../public/img/ch6.jpg" alt="Imagen 4" class="gallery-image">
+        </div>
+
+        <p class="description">Finalizamos el viaje con una cena en la ciudad de Chihuahua, donde probamos platillos tradicionales, ¡y ni qué decir de los recuerdos que nos llevamos! Fue una aventura inolvidable y una oportunidad perfecta para crear lazos entre todos los participantes. Nos vemos en el próximo viaje, ¿te unes?</p>
+    </div>
+
+    <!-- Overlay para la vista previa de imagen -->
+    <div class="preview-overlay" id="previewOverlay" onclick="closePreview()">
+        <img id="previewImage" src="" alt="Vista previa">
+    </div>
+
+    <script>
+        // Configuración de Intersection Observer para animación de desvanecimiento
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        });
+
+        // Seleccionar todos los elementos con la clase 'fade-in'
+        const fadeElements = document.querySelectorAll('.fade-in');
+        fadeElements.forEach(el => observer.observe(el));
+
+        // Función para abrir la vista previa de la imagen
+        function openPreview(src) {
+            document.getElementById('previewImage').src = src;
+            document.getElementById('previewOverlay').style.display = 'flex';
+        }
+
+        // Función para cerrar la vista previa
+        function closePreview() {
+            document.getElementById('previewOverlay').style.display = 'none';
+        }
+
+        // Agregar el evento 'click' a todas las imágenes de la galería
+        document.querySelectorAll('.gallery-image').forEach(image => {
+            image.addEventListener('click', (e) => {
+                e.stopPropagation(); // Evitar que el clic en la imagen cierre la vista
+                openPreview(image.src);
+            });
+        });
+    </script>
+</body>
+</html>

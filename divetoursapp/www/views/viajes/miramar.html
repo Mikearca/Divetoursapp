@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playa Miramar - Divertours</title>
+    <style>
+        /* Estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            background-color: #663D85;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            position: relative;
+        }
+
+        /* Flecha de regreso */
+        .back-arrow {
+            font-size: 24px;
+            color: #ffffff;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* Título */
+        h5 {
+            font-size: 20px;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        /* Animaciones de desvanecimiento */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Imagen principal en la parte superior */
+        .main-image {
+            width: 100%;
+            height: auto;
+            max-width: 400px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        /* Texto descriptivo */
+        .description {
+            text-align: justify;
+            padding: 0 10px;
+            font-size: 16px;
+            color: #ffffff;
+            margin-bottom: 20px;
+            max-width: 400px;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+        }
+
+        /* Espaciado entre párrafos e imágenes */
+        .spaced {
+            margin: 15px 0;
+        }
+
+        /* Galería de imágenes adicionales */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .description p{
+            margin-top: 3%;
+        }
+
+        /* Estilo de vista previa de imagen */
+        .image-preview {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-preview img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+
+        .image-preview.visible {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header con flecha de regreso y título -->
+    <div class="header">
+        <a href="javascript:history.back()" class="back-arrow">←</a>
+        <h5>PLAYA MIRAMAR</h5>
+    </div>
+
+    <!-- Imagen principal -->
+    <img src="../../public/img/miramar.jpeg" alt="Playa Miramar" class="main-image fade-in">
+
+    <!-- Texto centrado y justificado con imágenes entre párrafos -->
+    <div class="description fade-in">
+        <p>En nuestro viaje a Playa Miramar en Tampico, disfrutamos de una experiencia increíble en una de las playas más bellas del Golfo de México. Las aguas cristalinas y la arena suave nos dieron la bienvenida a un día de diversión bajo el sol.</p>
+
+        <!-- Imágenes entre párrafos -->
+        <div class="image-gallery spaced">
+            <img src="../../public/img/tampico.png" alt="Vista de Playa Miramar" class="gallery-image">
+            <img src="../../public/img/miramar2.jpg" alt="Atardecer en Playa Miramar" class="gallery-image">
+        </div>
+
+        <p>Paseamos por el malecón y disfrutamos de la brisa marina mientras observábamos las actividades de pesca y deportes acuáticos. Playa Miramar es un lugar perfecto para desconectarse y relajarse con el sonido de las olas de fondo.</p>
+
+        <!-- Imágenes entre párrafos -->
+        <div class="image-gallery spaced">
+            <img src="../../public/img/mir1.jpg" alt="Malecón en Playa Miramar" class="gallery-image">
+            <img src="../../public/img/mir2.jpg" alt="Actividades acuáticas en Playa Miramar" class="gallery-image">
+        </div>
+
+        <p>Además, disfrutamos de la gastronomía local en los restaurantes cercanos, probando mariscos frescos y otros platillos típicos de la región. Fue una experiencia memorable en un destino encantador.</p>
+
+        <!-- Imágenes entre párrafos -->
+        <div class="image-gallery spaced">
+            <img src="../../public/img/mir4.jpg" alt="Restaurante en Playa Miramar" class="gallery-image">
+            <img src="../../public/img/mir3.jpg" alt="Platillos típicos en Playa Miramar" class="gallery-image">
+        </div>
+    </div>
+
+    <!-- Contenedor de vista previa de imagen -->
+    <div class="image-preview" id="imagePreview">
+        <img src="" alt="Preview">
+    </div>
+
+    <script>
+        // Configuración de Intersection Observer para animación de desvanecimiento
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        });
+
+        const fadeElements = document.querySelectorAll('.fade-in');
+        fadeElements.forEach(el => observer.observe(el));
+
+        // Lógica de vista previa de imagen
+        const galleryImages = document.querySelectorAll('.gallery-image');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImg = imagePreview.querySelector('img');
+
+        galleryImages.forEach(img => {
+            img.addEventListener('click', () => {
+                previewImg.src = img.src;
+                imagePreview.classList.add('visible');
+            });
+        });
+
+        imagePreview.addEventListener('click', () => {
+            imagePreview.classList.remove('visible');
+        });
+    </script>
+</body>
+</html>

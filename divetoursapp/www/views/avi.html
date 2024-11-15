@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Avisos</title>
+    <style>
+        /* Estilos del cuerpo y fondo */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            background-color: #663D85;
+        }
+
+        /* Encabezado */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #663D85;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        .header a {
+            text-decoration: none;
+            color: white;
+            font-size: 24px;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        /* Contenedor del formulario */
+        .form-container {
+            width: 90%;
+            max-width: 500px;
+            background-color: #7b5597bf;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+            margin-top: 70px;
+        }
+
+        /* Títulos de los campos */
+        .form-container h3 {
+            margin-bottom: 10px;
+            color: white;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        /* Ícono de información */
+        .info-icon {
+            display: inline-block;
+            margin-left: 8px;
+            cursor: pointer;
+            color: white;
+            font-size: 18px;
+            position: relative;
+            vertical-align: middle;
+        }
+
+        .info-popup {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .info-popup::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+        }
+
+        .info-icon:hover .info-popup {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Estilos de los inputs */
+        .form-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            background-color: #281C31;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        /* Botón para crear el aviso */
+        .form-container button {
+            width: 100%;
+            padding: 15px;
+            background-color: #512D69;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Encabezado -->
+    <div class="header">
+        <a href="javascript:history.back()">&larr;</a>
+        <h2>Formulario de Avisos</h2>
+    </div>
+
+    <!-- Formulario de Avisos -->
+    <div class="form-container">
+        <!-- Campo del Título del aviso -->
+        <div>
+            <h3>Título</h3>
+            <span class="info-icon">&#9432;
+                <span class="info-popup">Ingresa un título breve para el aviso.</span>
+            </span>
+            <input type="text" id="avi_name" name="avi_name" placeholder="Título del aviso" required>
+        </div>
+
+        <!-- Campo de la Descripción del aviso -->
+        <div>
+            <h3>Descripción</h3>
+            <span class="info-icon">&#9432;
+                <span class="info-popup">Describe los detalles del aviso.</span>
+            </span>
+            <input type="text" id="avi_description" name="avi_description" placeholder="Descripción del aviso" required>
+        </div>
+
+        <!-- Botón para crear el aviso -->
+        <button onclick="crearAviso()">Crear Aviso</button>
+    </div>
+
+    <script>
+        function crearAviso() {
+            const aviName = document.getElementById('avi_name').value;
+            const aviDescription = document.getElementById('avi_description').value;
+
+            fetch('http://localhost:4000/avi/avisos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    avi_name: aviName,
+                    avi_description: aviDescription
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("Aviso creado con éxito!");
+                window.history.back(); // Ajusta esta ruta según corresponda
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Error al crear el aviso.");
+            });
+        }
+    </script>
+
+</body>
+</html>

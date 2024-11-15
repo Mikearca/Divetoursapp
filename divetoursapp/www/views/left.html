@@ -7,62 +7,69 @@
     <style>
         body {
             display: flex;
-            justify-content: center; /* Centra horizontalmente */
-            align-items: center; /* Centra verticalmente */
-            height: 100vh; /* Altura de la pantalla */
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            background-color: none; /* Color de fondo */
+            background-color: none;
         }
 
         .container {
-            width: 90%; /* Ancho del 90% de la pantalla */
-            max-width: 300px; /* Limita el ancho máximo del cuadro */
-            background-color: rgba(123, 85, 151, 0.9); /* Color de fondo del cuadro */
-            border-radius: 15px; /* Bordes redondeados */
-            padding: 20px; /* Espaciado interno */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
-            display: flex; /* Para centrar el contenido */
-            flex-direction: column; /* Coloca los elementos en una columna */
-            align-items: center; /* Centra horizontalmente los elementos */
+            width: 90%;
+            max-width: 300px;
+            background-color: rgba(123, 85, 151, 0.9);
+            border-radius: 15px; 
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .title {
-            text-align: center; /* Texto centrado */
-            font-size: 24px; /* Tamaño del título */
-            color: white; /* Color del texto */
-            margin-bottom: 15px; /* Espacio debajo del título */
+            text-align: center;
+            font-size: 24px;
+            color: white;
+            margin-bottom: 15px;
         }
 
         .description {
-            text-align: justify; /* Texto justificado */
-            color: white; /* Color del texto */
-            margin-bottom: 20px; /* Espacio debajo del párrafo */
+            text-align: justify;
+            color: white;
+            margin-bottom: 20px;
         }
 
         .input {
-            width: 82%; /* Ancho del input (puedes ajustarlo) */
-            padding: 10px; /* Espaciado interno */
-            border-radius: 20px; /* Bordes redondeados */
-            border: 1px solid #ccc; /* Borde */
-            margin-bottom: 15px; /* Espacio debajo del input */
-            font-size: 16px; /* Tamaño del texto */
-            text-align: center; /* Centra el texto dentro del input */
+            width: 82%;
+            padding: 10px; 
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px; 
+            font-size: 16px;
+            text-align: center;
         }
 
         .button {
-            width: 90%; /* Ancho del botón igual que el input */
-            padding: 10px; /* Espaciado interno */
-            border-radius: 20px; /* Bordes redondeados */
-            border: none; /* Sin borde */
-            background-color: #281C31; /* Color de fondo del botón */
-            color: white; /* Color del texto del botón */
-            font-size: 16px; /* Tamaño del texto del botón */
-            cursor: pointer; /* Cambia el cursor al pasar el mouse */
-            transition: background-color 0.3s; /* Transición suave */
+            width: 90%;
+            padding: 10px; 
+            border-radius: 20px;
+            border: none; 
+            background-color: #281C31; 
+            color: white; 
+            font-size: 16px;
+            cursor: pointer; 
+            transition: background-color 0.3s;
         }
 
         .button:hover {
-            background-color: #2d243a; /* Color del botón al pasar el mouse */
+            background-color: #2d243a;
+        }
+
+        .message {
+            color: white;
+            margin-top: 10px;
+            font-size: 14px;
+            text-align: center;
         }
     </style>
 </head>
@@ -70,8 +77,46 @@
     <div class="container">
         <h1 class="title">Itinerario de Viaje</h1>
         <p class="description">Para ver el itinerario debe estar inscrito a un viaje. Por favor ingresa o escanea el código de viaje.</p>
-        <input type="text" class="input" placeholder="Ingresa código">
-        <button class="button">Inscribirme</button>
+        <input type="text" class="input" id="codigoItinerario" placeholder="Ingresa código">
+        <button class="button" onclick="verificarCodigo()">Inscribirme</button>
+        <p class="message" id="mensaje"></p>
     </div>
+
+    <script>
+async function verificarCodigo() {
+    const idItinerario = document.getElementById("codigoItinerario").value;
+    const mensajeEl = document.getElementById("mensaje");
+    mensajeEl.textContent = "";  // Limpiar mensaje previo
+
+    const userId = localStorage.getItem("userId");  // Suponiendo que el ID del usuario esté en localStorage
+
+    if (!userId) {
+        mensajeEl.textContent = "No se encontró el ID del usuario. Asegúrate de haber iniciado sesión.";
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:4000/itineraries/verificar/${idItinerario}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId: userId })  // Enviar el ID del usuario junto con la solicitud
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            // Mostrar mensaje de éxito o redirigir
+            window.location.href = "divetoursapp/www/login.html";
+        } else {
+            // Mostrar mensaje de error si el código es incorrecto o expirado
+            mensajeEl.textContent = data.message || 'Error en la verificación del código';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        mensajeEl.textContent = 'Hubo un problema con la solicitud';
+    }
+}
+    </script>
 </body>
 </html>

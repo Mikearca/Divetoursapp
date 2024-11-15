@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Usuarios</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #663D85;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            position: relative; /* Cambiado de absolute a relative */
+            top: 0; /* Este valor ya no es necesario */
+            left: 0; /* Este valor ya no es necesario */
+            width: 100%;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #663D85;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        .header h5 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .header a {
+            text-decoration: none;
+            color: white;
+            font-size: 24px;
+        }
+
+        .list-container {
+            width: 90%;
+            max-width: 500px;
+            background-color: #7b5597bf;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+            margin-top: 140px;
+        }
+
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #4d2b61;
+        }
+
+        .delete-btn, .edit-btn {
+            cursor: pointer;
+            color: #ff4d4d;
+            font-size: 18px;
+            margin-left: 8px;
+        }
+
+        /* User preview modal */
+        .user-preview-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .user-preview {
+            background: #7b5597;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .user-preview h3 {
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        .user-preview input {
+            width: 90%;
+            padding: 8px;
+            margin: 8px 0;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .btn-group button {
+            padding: 8px 16px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-close { background: #444; }
+        .btn-edit { background: #4caf50; }
+        .btn-delete { background: #ff4d4d; }
+
+        /* Show overlay */
+        .user-preview-overlay.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .search-bar {
+            margin: 20px 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        .search-bar input {
+            width: 90%;
+            padding: 12px; /* Aumentar el padding para hacerla más grande */
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            background-color: #281C31;
+            color: white; /* Asegúrate de que el texto sea visible */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="javascript:window.history.back();">&#8592;</a>
+        <h2>Lista de Usuarios</h2>
+    </div>
+
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Buscar usuario" onkeyup="filterUsers()">
+    </div>
+
+    <!-- Cuadro para la lista de usuarios -->
+    <div class="list-container" id="userList">
+        <div class="no-users">Cargando usuarios...</div>
+    </div>
+
+    <!-- User preview overlay -->
+    <div class="user-preview-overlay" id="userPreviewOverlay">
+        <div class="user-preview">
+            <h3>Detalles del Usuario</h3>
+            <input type="text" id="userName" placeholder="Nombre">
+            <input type="text" id="userLastName" placeholder="Apellido">
+            <input type="email" id="userEmail" placeholder="Correo">
+            <input type="text" id="userRole" placeholder="Rol">
+            <div class="btn-group">
+                <button class="btn-close" onclick="closeUserPreview()">Cerrar</button>
+                <button class="btn-edit" onclick="saveUserChanges()">Guardar</button>
+                <button class="btn-delete" onclick="deleteUser()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+
+        async function deleteUser() {
+            if (!currentUser) return;
+            try {
+                const response = await fetch(`http://localhost:4000/users/user/${currentUser._id}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error('Error al eliminar el usuario');
+                loadUsers();
+                closeUserPreview();
+            } catch (error) {
+                console.error(error);
+                alert('Error al eliminar el usuario');
+            }
+        }
+
+        async function saveUserChanges() {
+            if (!currentUser) return;
+            const updatedUser = {
+                name: document.getElementById('userName').value,
+                last_name: document.getElementById('userLastName').value,
+                email: document.getElementById('userEmail').value,
+                rol: document.getElementById('userRole').value
+            };
+
+            try {
+                const response = await fetch(`http://localhost:4000/users/users/${currentUser._id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedUser)
+                });
+                if (!response.ok) throw new Error('Error al guardar cambios');
+                loadUsers();
+                closeUserPreview();
+            } catch (error) {
+                console.error(error);
+                alert('Error al guardar cambios');
+            }
+        }
+
+        function showUserPreview(user) {
+            currentUser = user;
+            document.getElementById('userName').value = user.name;
+            document.getElementById('userLastName').value = user.last_name;
+            document.getElementById('userEmail').value = user.email;
+            document.getElementById('userRole').value = user.rol;
+            document.getElementById('userPreviewOverlay').classList.add('show');
+        }
+
+        function closeUserPreview() {
+            currentUser = null;
+            document.getElementById('userPreviewOverlay').classList.remove('show');
+        }
+
+        async function loadUsers() {  
+            try {
+                const response = await fetch('http://localhost:4000/users/users');
+                const users = await response.json();
+                const regularUsers = users.filter(user => user.rol === 'user');
+                
+                const userList = document.getElementById('userList');
+                userList.innerHTML = '';
+                
+                if (regularUsers.length === 0) {
+                    userList.innerHTML = '<div class="no-users">No hay ningún usuario</div>';
+                } else {
+                    regularUsers.forEach(user => {
+                        const userItem = document.createElement('div');
+                        userItem.className = 'user-item';
+                        userItem.innerHTML = `<span>${user.name} ${user.last_name}</span>`;
+                        userItem.addEventListener('click', () => showUserPreview(user));
+                        userList.appendChild(userItem);
+                    });
+                }
+            } catch (error) {
+                console.error(error);
+                document.getElementById('userList').innerHTML = '<div class="no-users">Error al cargar usuarios</div>';
+            }
+        }
+
+        function filterUsers() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toLowerCase();
+        const userItems = document.querySelectorAll('.user-item');
+
+        userItems.forEach(item => {
+            const userName = item.innerText.toLowerCase();
+            item.style.display = userName.includes(filter) ? 'flex' : 'none';
+        });
+    }
+
+        loadUsers();
+    </script>
+
+</body>
+</html>

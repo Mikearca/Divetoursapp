@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Viajeros</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #663D85;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #663D85;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        .header h5 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .header a {
+            text-decoration: none;
+            color: white;
+            font-size: 24px;
+        }
+
+        .back-arrow {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 24px;
+            color: white;
+            cursor: pointer;
+            z-index: 2; /* Para que quede sobre el header */
+        }
+
+        .main-container {
+            position: fixed;
+            top: 50px; /* Espacio debajo de la flecha */
+            width: 90%;
+            max-width: 500px;
+            background-color: #7b5597bf;
+            border-radius: 0 0 15px 15px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            box-sizing: border-box;
+            z-index: 1;
+        }
+
+        .main-container img {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            margin-right: 15px;
+        }
+
+        .list-container {
+            width: 90%;
+            max-width: 500px;
+            background-color: #7b5597bf;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+            margin-top: 140px; /* Espacio para que no se solape con el header */
+        }
+
+        .traveler-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #4d2b61;
+        }
+
+        .no-travelers {
+            text-align: center;
+            font-size: 16px;
+            color: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="javascript:window.history.back();">&#8592;</a> 
+        <h5>Lista de Viajeros</h5>
+    </div>
+
+    <!-- Cuadro para la lista de viajeros -->
+    <div class="list-container" id="travelerList">
+        <div class="no-travelers">Cargando viajeros...</div>
+    </div>
+
+    <script>
+        // Función para regresar a la vista anterior
+        function goBack() {
+            window.location.href = "/www/inicioa.html";
+        }
+
+        // Cargar la lista de viajeros
+        async function loadTravelers() {
+            try {
+                const response = await fetch('http://localhost:4000/users/users'); 
+                if (!response.ok) throw new Error('Error al obtener la lista de viajeros');
+                
+                const users = await response.json();
+                const travelers = users.filter(user => user.role === 'traveler');
+                
+                const travelerList = document.getElementById('travelerList');
+                travelerList.innerHTML = ''; // Limpiar el contenido previo
+                
+                if (travelers.length === 0) {
+                    travelerList.innerHTML = '<div class="no-travelers">No hay ningún viajero</div>';
+                } else {
+                    travelers.forEach(traveler => {
+                        const travelerItem = document.createElement('div');
+                        travelerItem.className = 'traveler-item';
+                        travelerItem.textContent = traveler.name; // Ajusta esto según la estructura de tu base de datos
+                        travelerList.appendChild(travelerItem);
+                    });
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('travelerList').innerHTML = '<div class="no-travelers">Error al cargar viajeros</div>';
+            }
+        }
+
+        // Llamar a la función para cargar los viajeros al cargar la página
+        loadTravelers();
+    </script>
+
+</body>
+</html>

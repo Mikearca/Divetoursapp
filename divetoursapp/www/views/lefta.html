@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Itinerario de Viaje</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px 0;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            color: white;
+            text-align: center;
+            width: 100%;
+        }
+
+        h5 {
+            font-size: 20px;
+            color: #ffffff;
+            margin-bottom: 20px;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        .create-button {
+            width: 86%;
+            padding: 15px;
+            background-color: #281C31;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .create-button:hover {
+            background-color: #39243f;
+        }
+
+        .itineraries-container {
+            width: 80%;
+            background-color: #7C5597;
+            border-radius: 10px;
+            padding: 15px;
+            color: white;
+            overflow-y: auto;
+            max-height: 60vh;
+        }
+
+        .itineraries-container h3 {
+            margin: 0 0 15px 0;
+            font-size: 22px;
+        }
+
+        .itinerary-item {
+            background-color: #663D85;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .itinerary-item:hover {
+            background-color: #7C5597;
+        }
+
+        .preview-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .preview-content {
+            background-color: #7C5597;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .info-box {
+            background-color: #39243f;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+        }
+
+        .info-box h4 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .close-button, .delete-button {
+            background-color: #281C31;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 10px auto 0 auto;
+        }
+
+        .close-button:hover, .delete-button:hover {
+            background-color: #39243f;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <h5>Itinerario de viaje</h5>
+        
+        <button class="create-button" onclick="formiti()">Crear Itinerario</button>
+        
+        <div class="itineraries-container">
+            <h3>Itinerarios Creados</h3>
+            <div id="itineraries-list"></div>
+        </div>
+        
+        <!-- Modal para vista previa del itinerario -->
+        <div class="preview-modal" id="itineraryPreviewOverlay">
+            <div class="preview-content">
+                <h3>Detalles del Itinerario</h3>
+                <p><strong>Nombre:</strong> <span id="itineraryName"></span></p>
+                <p><strong>Descripción:</strong> <span id="itineraryDescription"></span></p>
+                <p><strong>Fecha de inicio:</strong> <span id="itineraryStartDate"></span></p>
+                <p><strong>Fecha de fin:</strong> <span id="itineraryEndDate"></span></p>
+                <button class="close-button" onclick="closeItineraryPreview()">Cerrar</button>
+                <button class="delete-button" onclick="deleteItinerary()">Eliminar</button>
+            </div>
+        </div>
+
+</div>
+
+<script>
+    let currentItinerary = null;
+    document.addEventListener("DOMContentLoaded", loadItineraries);
+</script>
+    
+</body>
+</html>

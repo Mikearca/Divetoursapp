@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avisos</title>
+    <style>
+        /* Estilos generales */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Cuadro centrado con los datos del usuario */
+        .user-info, .notifications, .view-button {
+            width: 80%;
+            background-color: rgba(123, 85, 151, 0.75);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info img {
+            width: 30%;
+            height: 30%;
+            border-radius: 20%;
+            margin-right: 20px;
+        }
+
+        .user-info div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: #ffffff; 
+        }
+
+        .user-info h3 {
+            margin: 0;
+            font-size: 1.5rem; 
+        }
+
+        .user-info p {
+            color: #007BFF;
+            font-size: 1rem;
+            margin: 5px 0 0;
+        }
+
+        .view-button {
+            background-color: #39243f;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background-color 0.3s;
+        }
+
+        .view-button:hover {
+            background-color: #281C31;
+        }
+
+        .notifications h2 {
+            margin: 0;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+            color: #ffffff;
+        }
+
+        .notifications .aviso {
+            background-color: #7b5597;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .notifications .aviso h3 {
+            margin: 0;
+            color: #39243f;
+            font-size: 1.2rem;
+            margin-bottom: 10px; 
+        }
+
+        .notifications .aviso p {
+            color: #ffffff;
+            text-align: justify;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="user-info">
+            <img src="../public/img/superguia.png" alt="Usuario">
+            <div>
+                <h3 id="user-name"></h3>
+                <p id="user-email"></p>
+            </div>
+        </div>
+
+        <div class="view-button" onclick="window.location.href='../views/avi.html'">Crear Aviso</div>
+
+        <div class="notifications">
+            <h2>Avisos Creados</h2>
+            <div class="avisos" id="avisos"></div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('message', (event) => {
+            const avisos = event.data;
+            const notificationsContainer = document.querySelector('.notifications');
+
+            avisos.forEach(aviso => {
+                const avisoElement = document.createElement('div');
+                avisoElement.classList.add('aviso');
+
+                const avisoName = document.createElement('h3');
+                avisoName.textContent = aviso.avi_name;
+                avisoElement.appendChild(avisoName);
+
+                const avisoDescription = document.createElement('p');
+                avisoDescription.textContent = aviso.avi_description;
+                avisoElement.appendChild(avisoDescription);
+
+                notificationsContainer.appendChild(avisoElement);
+            });
+        });
+    </script>
+
+</body>
+</html>

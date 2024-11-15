@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Itinerario</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            background-color: #663D85;
+        }
+
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #663D85;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        .header h5 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .header a {
+            text-decoration: none;
+            color: white;
+            font-size: 24px;
+        }
+
+        .form-container {
+            width: 90%;
+            max-width: 500px;
+            background-color: #7b5597bf;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+            margin-top: 70px; /* Añade un margen para no sobreponer con el header */
+        }
+
+        .form-container h3 {
+            margin-bottom: 10px;
+            color: white;
+            text-align: left;
+            display: inline-block;
+        }
+
+        .info-icon {
+            display: inline-block;
+            margin-left: 8px;
+            cursor: pointer;
+            color: white;
+            font-size: 18px;
+            position: relative;
+        }
+
+        .info-popup {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Ajuste para posicionar arriba del ícono */
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .info-popup::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+        }
+
+        .info-icon:hover .info-popup {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .form-container input,
+        .form-container textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            background-color: #281C31;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        .form-container textarea {
+            height: 100px;
+        }
+
+        .form-container button {
+            width: 100%;
+            padding: 15px;
+            background-color: #512D69;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+
+        /* Estilo responsivo */
+        @media (max-width: 600px) {
+            .header h5 {
+                font-size: 16px;
+            }
+
+            .form-container {
+                width: 95%;
+                margin-top: 60px; /* Ajuste para pantallas pequeñas */
+            }
+
+            .form-container input, 
+            .form-container textarea {
+                font-size: 14px;
+            }
+
+            .form-container button {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header con flecha y título -->
+    <div class="header">
+        <a href="javascript:window.history.back();">&#8592;</a> <!-- Flecha para volver -->
+        <h5>Itinerario de viaje</h5>
+    </div>
+
+    <!-- Formulario para crear itinerario -->
+    <div class="form-container">
+        <form id="itinerarioForm">
+            <h3>Destino</h3>
+            <span class="info-icon"><i class="fas fa-info-circle"></i>
+                <span class="info-popup">Aquí puedes poner el destino del viaje.</span>
+            </span>
+            <input type="text" id="iti_name" placeholder="Ingresa el destino" required>
+
+            <h3>Descripción del itinerario</h3>
+            <span class="info-icon"><i class="fas fa-info-circle"></i>
+                <span class="info-popup">Describe lo que se hará en el viaje, separado por días.</span>
+            </span>
+            <textarea id="description" placeholder="Descripción" required></textarea>
+
+            <h3>Fecha de inicio</h3>
+            <span class="info-icon"><i class="fas fa-info-circle"></i>
+                <span class="info-popup">Selecciona la fecha de inicio del viaje.</span>
+            </span>
+            <input type="date" id="start_date" required>
+
+            <h3>Fecha de cierre</h3>
+            <span class="info-icon"><i class="fas fa-info-circle"></i>
+                <span class="info-popup">Selecciona la fecha de cierre del viaje.</span>
+            </span>
+            <input type="date" id="end_date" required>
+
+            <button type="submit">Crear Itinerario</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('itinerarioForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevenir el envío normal del formulario
+    
+            // Captura los datos del formulario
+            const itiName = document.getElementById('iti_name').value;
+            const description = document.getElementById('description').value;
+            const startDate = document.getElementById('start_date').value;
+            const endDate = document.getElementById('end_date').value;
+    
+            // Crea el objeto con los datos a enviar
+            const itinerarioData = {
+                iti_name: itiName,
+                description: description,
+                start_date: startDate,
+                end_date: endDate
+            };
+    
+            try {
+                // Envía la solicitud POST al servidor
+                const response = await fetch('http://localhost:4000/itineraries/iti', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(itinerarioData)
+                });
+    
+                // Maneja la respuesta
+                if (response.ok) {
+                    const data = await response.json();
+                    alert(data.message); // Muestra el mensaje de éxito
+                    window.history.back(); // Redirige al usuario
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error: ${errorData.message}`); // Muestra el mensaje de error
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Hubo un problema al enviar el itinerario.'); // Mensaje de error genérico
+            }
+        });
+    </script>
+    
+
+</body>
+</html>

@@ -16,21 +16,15 @@
             left: 0;
             width: 100%;
             height: 20vh;
-            background: white;
-            background: linear-gradient(to bottom, white 80%, rgba(102, 61, 133, 0));
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
         }
 
-        .header img.logo {
-            max-height: 40%;
-        }
-
-        .header button img {
-            width: 30px;
-            height: 30px;
+        .header h2 {
+            color: white;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
         }
 
         .main-content {
@@ -43,6 +37,7 @@
             background-color: none;
             position: relative;
             height: auto;
+            width: 100%;
         }
 
         .main-content.visible {
@@ -55,9 +50,10 @@
         }
 
         .bienvenida {
-            width: 80%;
-            background-color: rgba(123, 85, 151, 0.75);
-            margin: 15px 0;
+            width: 100%;
+            max-width: 80%;
+            background-color: #7b5597bf;
+            margin: 15px auto;
             border-radius: 15px;
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -67,6 +63,42 @@
             text-align: left;
             margin: 0;
             font-size: small;
+        }
+
+        .cuadros {
+            display: flex;
+            justify-content: space-around;
+            width: 90%;
+            margin: 15px 0;
+            gap: 20px;
+        }
+
+        .cuadro {
+            width: 45%;
+            background-color: rgba(123, 85, 151, 0.75);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .cuadro img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .comentarios {
+            width: 80%;
+            background-color: rgba(123, 85, 151, 0.75);
+            margin: 20px 0;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .comentarios h3 {
+            text-align: center;
+            margin-bottom: 15px;
         }
 
         .hola{
@@ -134,63 +166,31 @@
     
     <div class="main-content visible" id="home-content">
         <div class="header">
-            <img src="../www/public/img/Divertours.jpg" alt="DIVERTOURS" class="logo">
+            <h2>ADMINISTRADOR</h2>
         </div>
         <div class="bienvenida">
             <h2>Mi ubicacion</h2>
             <div id="map"></div>
         </div>
-        <div class="hola">
-            <h2>Hola de Nuevo</h2>
-            <p>Aqui tienes algunos de los lugares que hemos visitado</p>
-        </div>
-        <div class="image-container" onclick="window.location.href= '../views/viajes/Mazatlan.html' ">
-            <div class="lugar">
-                <h2>Mazatlan</h2>
+
+        <!-- Dos cuadros lado a lado -->
+        <div class="cuadros">
+            <div class="cuadro" onclick="gousers()">
+                <h5>Lista de Usuarios</h5>
+                <img src="../public/img/group.png" alt="Usuarios">
             </div>
-            <img src="../public/img/mazatlan.jpg" alt="Mazatlan">
-        </div>
-        <div class="image-container" onclick="window.location.href= '../views/viajes/chihuahua.html'">
-            <div class="lugar">
-                <h2>Chihuahua</h2>
+            <div class="cuadro" onclick="gotrav()">
+                <h5>Lista de Viajeros</h5>
+                <img src="../public/img/traveller.png" alt="Viajeros">
             </div>
-            <img src="../public/img/chihuahua2.jpeg" alt="Chihuahua" >
         </div>
-        <div class="image-container" onclick="window.location.href= '../views/viajes/oaxaca.html'">
-            <div class="lugar">
-                <h2>Oaxaca</h2>
+
+        <!-- Cuadro de comentarios -->
+        <div class="comentarios" id="comments-container" onclick="window.location.href='../views/comments.html'">
+            <h3>Comentarios</h3>
+            <div id="comments-content">
+                <!-- Aquí se cargarán los comentarios dinámicamente -->
             </div>
-            <img src="../public/img/oaxaca2.jpg" alt="Oaxaca" >
-        </div>
-        <div class="image-container" onclick="window.location.href= '../views/viajes/puebla.html'">
-            <div class="lugar">
-                <h2>Puebla</h2>
-            </div>
-            <img src="../public/img/puebla.jpg" alt="Puebla">
-        </div>
-        <div class="image-container" onclick="window.location.href= '../views/viajes/realcatorce.html'">
-            <div class="lugar">
-                <h2>Real de Catorce</h2>
-            </div>
-            <img src="../public/img/realcatorce3.jpg" alt="Real de Catorce">
-        </div>
-        <div class="image-container" onclick="window.location.href= '../views/viajes/Guadalajara.html'">
-            <div class="lugar">
-                <h2>Guadalajara</h2>
-            </div>
-            <img src="../public/img/guadalajara.jpg" alt="Guadalajara">
-        </div>
-        <div class="image-container" onclick="window.location.href= '../views/viajes/nuevoleon.html'">
-            <div class="lugar">
-                <h2>Nuevo Leon</h2>
-            </div>
-            <img src="../public/img/nuevoleon.jpg" alt="Nuevo Leon">
-        </div>
-        <div class="image-container" onclick="window.location.href= '../views/viajes/miramar.html'">
-            <div class="lugar">
-                <h2>Tampico</h2>
-            </div>
-            <img src="../public/img/miramar.jpeg" alt="Tampico">
         </div>
     </div>
 
@@ -201,6 +201,7 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
         initializeMap(); 
+
     </script>
     
 </body>

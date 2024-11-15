@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puebla</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            background-color: #663D85;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            position: relative;
+        }
+
+        .back-arrow {
+            font-size: 24px;
+            color: #ffffff;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        h5 {
+            font-size: 20px;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .main-image {
+            width: 100%;
+            height: auto;
+            max-width: 400px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .description-container {
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: justify;
+            font-size: 16px;
+            color: #ffffff;
+            margin-bottom: 20px;
+            max-width: 400px;
+        }
+
+        .spaced {
+            margin: 15px 0;
+        }
+
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .image-preview-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-preview-overlay img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+
+        .image-preview-overlay.visible {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="javascript:history.back()" class="back-arrow">←</a>
+        <h5>PUEBLA</h5>
+    </div>
+
+    <img src="../../public/img/puebla.jpg" alt="Puebla" class="main-image fade-in">
+
+    <div class="description-container fade-in">
+        <p>Puebla nos recibió con una impresionante mezcla de tradición, historia y naturaleza. Nuestra primera parada fue la Ciudad de Puebla, con su arquitectura colonial y la impresionante Catedral. Luego, exploramos los coloridos pueblos mágicos que rodean la ciudad.</p>
+
+        <div class="image-gallery spaced">
+            <img src="../../public/img/p1.jpg" alt="Chignahuapan" class="gallery-image">
+            <img src="../../public/img/p3.jpg" alt="Zacatlán" class="gallery-image">
+        </div>
+
+        <p>Visitamos Chignahuapan, famoso por sus aguas termales, y Zacatlán de las Manzanas, donde disfrutamos de la belleza natural y los imponentes miradores.</p>
+
+        <div class="image-gallery spaced">
+            <img src="../../public/img/p6.jpg" alt="Atlixco" class="gallery-image">
+            <img src="../../public/img/p5.jpg" alt="Tlatlahuquitepec" class="gallery-image">
+        </div>
+
+        <p>En Atlixco, sus hermosos jardines y clima perfecto nos regalaron un día lleno de color. Tlatlahuquitepec, con sus tradiciones y ambiente místico, nos permitió conectar con la naturaleza y la cultura de la región.</p>
+
+        <div class="image-gallery spaced">
+            <img src="../../public/img/pa.jpg" alt="Xico6tepec" class="gallery-image">
+            <img src="../../public/img/p4.jpg" alt="Ciudad de Puebla" class="gallery-image">
+        </div>
+
+        <p>Finalizamos nuestra aventura en Xicotepec, un paraíso montañoso lleno de historia y paisajes únicos. Puebla y sus alrededores nos brindaron una experiencia cultural inolvidable. ¡No podemos esperar a nuestra próxima visita!</p>
+    </div>
+
+    <!-- Overlay para la previsualización de la imagen -->
+    <div class="image-preview-overlay" id="imagePreviewOverlay">
+        <img id="previewImage" src="" alt="Preview">
+    </div>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        });
+
+        const fadeElements = document.querySelectorAll('.fade-in');
+        fadeElements.forEach(el => observer.observe(el));
+
+        const imageGallery = document.querySelectorAll('.gallery-image');
+        const overlay = document.getElementById('imagePreviewOverlay');
+        const previewImage = document.getElementById('previewImage');
+
+        imageGallery.forEach(img => {
+            img.addEventListener('click', () => {
+                previewImage.src = img.src;
+                overlay.classList.add('visible');
+            });
+        });
+
+        overlay.addEventListener('click', () => {
+            overlay.classList.remove('visible');
+        });
+    </script>
+</body>
+</html>

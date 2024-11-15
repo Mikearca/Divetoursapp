@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real de Catorce - Divertours</title>
+    <style>
+        /* Estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            background-color: #663D85;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            position: relative;
+        }
+
+        /* Flecha de regreso */
+        .back-arrow {
+            font-size: 24px;
+            color: #ffffff;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* Título */
+        h5 {
+            font-size: 20px;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        /* Animaciones de desvanecimiento */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Imagen principal en la parte superior */
+        .main-image {
+            width: 100%;
+            height: auto;
+            max-width: 400px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        /* Contenedor de texto descriptivo */
+        .description {
+            text-align: justify;
+            padding: 15px;
+            font-size: 16px;
+            color: #ffffff;
+            margin-bottom: 20px;
+            max-width: 400px;
+            background-color: rgba(0, 0, 0, 0.4); /* Color de fondo */
+            border-radius: 10px; /* Bordes redondeados */
+        }
+
+        /* Espaciado entre párrafos e imágenes */
+        .spaced {
+            margin: 15px 0;
+        }
+
+        /* Galería de imágenes adicionales */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        /* Estilo de vista previa de imagen */
+        .image-preview {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-preview img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+
+        .image-preview.visible {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header con flecha de regreso y título -->
+    <div class="header">
+        <a href="javascript:history.back()" class="back-arrow">←</a>
+        <h5>REAL DE CATORCE</h5>
+    </div>
+
+    <!-- Imagen principal -->
+    <img src="../../public/img/realcatorce2.jpg" alt="Real de Catorce" class="main-image fade-in">
+
+    <!-- Texto centrado y justificado con imágenes entre párrafos -->
+    <div class="description fade-in">
+        <p>Real de Catorce es un pueblo mágico rodeado de historia, naturaleza y cultura. Nuestra primera parada fue el icónico Túnel Ogarrio, el único acceso al pueblo, que nos transporta a otro tiempo y lugar. Su arquitectura colonial y sus calles empedradas nos dieron la bienvenida a esta aventura.</p>
+
+        <!-- Imágenes entre párrafos -->
+        <div class="image-gallery spaced">
+            <img src="../../public/img/rc4.jpg" alt="Túnel Ogarrio" class="gallery-image">
+            <img src="../../public/img/rc9.jpg" alt="Centro Histórico" class="gallery-image">
+        </div>
+
+        <p>Exploramos el Cerro del Quemado, un sitio sagrado para el pueblo huichol. Este lugar místico nos permitió reflexionar y admirar vistas panorámicas espectaculares de la sierra. La conexión con la naturaleza y la cultura fue una experiencia única.</p>
+
+        <!-- Imágenes entre párrafos -->
+        <div class="image-gallery spaced">
+            <img src="../../public/img/rc5.jpg" alt="Cerro del Quemado" class="gallery-image">
+            <img src="../../public/img/rc6.jpg" alt="Vistas de la Sierra" class="gallery-image">
+        </div>
+
+        <p>También visitamos la Iglesia de la Purísima Concepción, donde los peregrinos se reúnen para pedir deseos y agradecer favores. La energía espiritual del lugar y la devoción de sus visitantes nos dejaron una profunda impresión.</p>
+
+        <!-- Imágenes entre párrafos -->
+        <div class="image-gallery spaced">
+            <img src="../../public/img/rc7.jpg" alt="Iglesia de la Purísima Concepción" class="gallery-image">
+            <img src="../../public/img/rc8.jpg" alt="Peregrinos" class="gallery-image">
+        </div>
+    </div>
+
+    <!-- Contenedor de vista previa de imagen -->
+    <div class="image-preview" id="imagePreview">
+        <img src="" alt="Preview">
+    </div>
+
+    <script>
+        // Configuración de Intersection Observer para animación de desvanecimiento
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        });
+
+        const fadeElements = document.querySelectorAll('.fade-in');
+        fadeElements.forEach(el => observer.observe(el));
+
+        // Lógica de vista previa de imagen
+        const galleryImages = document.querySelectorAll('.gallery-image');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImg = imagePreview.querySelector('img');
+
+        galleryImages.forEach(img => {
+            img.addEventListener('click', () => {
+                previewImg.src = img.src;
+                imagePreview.classList.add('visible');
+            });
+        });
+
+        imagePreview.addEventListener('click', () => {
+            imagePreview.classList.remove('visible');
+        });
+    </script>
+</body>
+</html>
