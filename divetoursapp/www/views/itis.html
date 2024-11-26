@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manejador de Itinerarios</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #663D85;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .header {
+            position: absolute;
+            top: 10px;
+            width: 90%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .header h5 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .container {
+            background-color: #7b5597;
+            padding: 20px;
+            border-radius: 15px;
+            width: 80%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+
+        .sub-container {
+            background-color: #281C31;
+            border-radius: 10px;
+            padding: 15px;
+            width: 48%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .sub-container1,
+        .sub-container2 {
+            background-color: #281C31;
+            border-radius: 10px;
+            padding: 15px;
+            width: 40%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .sub-container1 h5,
+        .sub-container2 h5 {
+            margin-bottom: 10px;
+        }
+
+        .sub-container1 p,
+        .sub-container2 p {
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .sub-container3,
+        .sub-container4 {
+            background-color: #281C31;
+            border-radius: 10px;
+            padding: 15px;
+            width: 40%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .sub-container3 h5,
+        .sub-container4 h5 {
+            margin-bottom: 10px;
+        }
+
+        .sub-container3 p,
+        .sub-container4 p {
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .full-width {
+            width: 100%;
+        }
+
+        .sub-container h5 {
+            margin-bottom: 10px;
+        }
+
+        .sub-container p {
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .delete-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #ff4d4d;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .delete-btn:hover {
+            background-color: #e64343;
+        }
+
+        @media (max-width: 768px) {
+            .sub-container {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="javascript:window.history.back();">&#8592;</a>
+        <h5>Itinerario Creado</h5>
+    </div>
+
+    <div class="container" id="itineraryContainer">
+        <div class="sub-container1">
+            <h5>Destino</h5>
+            <p id="iti_name">Cargando...</p>
+        </div>
+        <div class="sub-container2">
+            <h5>Código de Viaje</h5>
+            <p id="iti_id">Cargando...</p>
+        </div>
+        <div class="sub-container full-width">
+            <h5>Descripción</h5>
+            <p id="iti_description">Cargando...</p>
+        </div>
+        <div class="sub-container3">
+            <h5>Fecha de Inicio</h5>
+            <p id="iti_start_date">Cargando...</p>
+        </div>
+        <div class="sub-container4">
+            <h5>Fecha de Cierre</h5>
+            <p id="iti_end_date">Cargando...</p>
+        </div>
+    </div>
+
+    <button class="delete-btn" onclick="clearItinerary()">Eliminar Itinerario</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', loadItinerary);
+
+        // Cargar el único itinerario
+        async function loadItinerary() {
+            try {
+                const response = await fetch('http://localhost:4000/itineraries/itis');
+                if (!response.ok) {
+                    throw new Error('Error al cargar el itinerario');
+                }
+
+                const itineraries = await response.json();
+
+                if (itineraries.length === 0) {
+                    document.getElementById('itineraryContainer').innerHTML = '<p>No hay itinerarios disponibles.</p>';
+                } else {
+                    const itinerary = itineraries[0]; // Solo hay un itinerario
+                    document.getElementById('iti_name').textContent = itinerary.iti_name;
+                    document.getElementById('iti_id').textContent = itinerary.iti_id;
+                    document.getElementById('iti_description').textContent = itinerary.description;
+                    document.getElementById('iti_start_date').textContent =
+                        new Date(itinerary.start_date).toLocaleDateString();
+                    document.getElementById('iti_end_date').textContent =
+                        new Date(itinerary.end_date).toLocaleDateString();
+                }
+            } catch (error) {
+                alert('Hubo un problema al cargar el itinerario. Inténtalo más tarde.');
+            }
+        }
+
+        // Eliminar todos los registros de la colección
+        async function clearItinerary() {
+            try {
+                const response = await fetch('http://localhost:4000/itineraries/clear', {
+                    method: 'DELETE',
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error al eliminar el itinerario');
+                }
+
+                alert('Itinerario eliminado correctamente.');
+                document.getElementById('itineraryContainer').innerHTML = '<p>No hay itinerarios disponibles.</p>';
+            } catch (error) {
+                alert('No se pudo eliminar el itinerario. Inténtalo más tarde.');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -3,120 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Itinerario de Viaje</title>
+    <title>Fondo Animado</title>
     <style>
         body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* Fondo animado */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: none;
         }
 
-        .container {
+        .background img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            animation: fade 20s infinite;
+        }
+
+        /* Degradado sobre el fondo */
+        .background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2));
+            z-index: 1;
+        }
+
+        /* Animaciones para imágenes */
+        @keyframes fade {
+            0% {
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .background img:nth-child(1) {
+            animation-delay: 0s;
+        }
+        .background img:nth-child(2) {
+            animation-delay: 5s;
+        }
+        .background img:nth-child(3) {
+            animation-delay: 10s;
+        }
+        .background img:nth-child(4) {
+            animation-delay: 15s;
+        }
+
+        /* Contenedor centrado */
+        .content-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(40, 28, 49, 0.85); /* Color con transparencia */
+            border-radius: 15px;
             width: 90%;
-            max-width: 300px;
-            background-color: rgba(123, 85, 151, 0.9);
-            border-radius: 15px; 
+            max-width: 600px;
             padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .title {
             text-align: center;
-            font-size: 24px;
-            color: white;
-            margin-bottom: 15px;
+            z-index: 2;
         }
 
-        .description {
-            text-align: justify;
-            color: white;
+        h5 {
+            font-size: 1.8rem;
             margin-bottom: 20px;
         }
 
-        .input {
-            width: 82%;
-            padding: 10px; 
-            border-radius: 20px;
-            border: 1px solid #ccc;
-            margin-bottom: 15px; 
-            font-size: 16px;
-            text-align: center;
+        p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin: 20px;
+            text-align: justify;
         }
 
-        .button {
-            width: 90%;
-            padding: 10px; 
-            border-radius: 20px;
-            border: none; 
-            background-color: #281C31; 
-            color: white; 
-            font-size: 16px;
-            cursor: pointer; 
-            transition: background-color 0.3s;
-        }
-
-        .button:hover {
-            background-color: #2d243a;
-        }
-
-        .message {
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
             color: white;
-            margin-top: 10px;
-            font-size: 14px;
-            text-align: center;
+            background-color: #6200ea;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3700b3;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="title">Itinerario de Viaje</h1>
-        <p class="description">Para ver el itinerario debe estar inscrito a un viaje. Por favor ingresa o escanea el código de viaje.</p>
-        <input type="text" class="input" id="codigoItinerario" placeholder="Ingresa código">
-        <button class="button" onclick="verificarCodigo()">Inscribirme</button>
-        <p class="message" id="mensaje"></p>
+    <!-- Fondo animado -->
+    <div class="background">
+        <img src="../public/img/ch3.jpg" alt="Imagen 1">
+        <img src="../public/img/p5.jpg" alt="Imagen 2">
+        <img src="../public/img/rc2.jpg" alt="Imagen 3">
+        <img src="../public/img/p3.jpg" alt="Imagen 4">
+        <img src="../public/img/f1.jpg" alt="Imagen 5">
     </div>
 
-    <script>
-async function verificarCodigo() {
-    const idItinerario = document.getElementById("codigoItinerario").value;
-    const mensajeEl = document.getElementById("mensaje");
-    mensajeEl.textContent = "";  // Limpiar mensaje previo
-
-    const userId = localStorage.getItem("userId");  // Suponiendo que el ID del usuario esté en localStorage
-
-    if (!userId) {
-        mensajeEl.textContent = "No se encontró el ID del usuario. Asegúrate de haber iniciado sesión.";
-        return;
-    }
-
-    try {
-        const response = await fetch(`http://localhost:4000/itineraries/verificar/${idItinerario}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ userId: userId })  // Enviar el ID del usuario junto con la solicitud
-        });
-
-        const data = await response.json();
-        if (response.ok) {
-            // Mostrar mensaje de éxito o redirigir
-            window.location.href = "divetoursapp/www/login.html";
-        } else {
-            // Mostrar mensaje de error si el código es incorrecto o expirado
-            mensajeEl.textContent = data.message || 'Error en la verificación del código';
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        mensajeEl.textContent = 'Hubo un problema con la solicitud';
-    }
-}
-    </script>
+    <!-- Contenedor centrado con el contenido -->
+    <div class="content-container">
+        <h5>Bienvenido al Itinerario de Viaje</h5>
+        <p>
+            En *Divertours*, el itinerario de viaje es tu guía durante toda la experiencia. Aquí encontrarás toda la 
+            información importante, como el destino, la duración del viaje y un resumen de las actividades programadas. 
+            Este itinerario estará disponible en todo momento para que puedas consultarlo fácilmente y disfrutar al máximo de tu aventura.
+        </p>
+        <button onclick="location.href='./views/verifiti.html'">Inscribirme</button>
+    </div>
 </body>
 </html>

@@ -28,16 +28,16 @@ function showSection(viewName, buttonElement) {
 
             if (viewName === 'righta') {
                 loadAvisos();
-                loadUserInfo();
             }
 
             if (viewName === 'homea') {
-                initializeMap(); 
+                initializeMap();
+                loadUserInfo(); 
             }
 
 
             if (viewName === 'lefta') {
-                loadItineraries();
+                loadItinerary();
             }
 
         })
@@ -89,56 +89,6 @@ function gotrav() {
 }
 
 //VISTA DERECHA
-async function loadAvisos() {
-    try {
-        console.log("Cargando avisos...");
-        const response = await fetch('http://localhost:4000/avi/avisos');
-        if (response.ok) {
-            const avisos = await response.json();
-            console.log("Avisos cargados:", avisos);
-
-            // Obtén la vista actual que se está mostrando
-            const mainContent = document.querySelector('.main-content');
-
-            // Verifica si hay un elemento con la clase 'avisos' en la vista cargada
-            const avisosDiv = mainContent.querySelector('.avisos');
-            if (avisosDiv) {
-                // Limpia el contenido existente
-                avisosDiv.innerHTML = ''; 
-                
-                // Cargar los avisos en el div
-                avisos.forEach(aviso => {
-                    // Crea un div para cada aviso
-                    const avisoElement = document.createElement('div');
-                    avisoElement.classList.add('aviso'); // Agrega una clase para estilizar si es necesario
-
-                    // Crea un encabezado para el nombre del aviso
-                    const avisoName = document.createElement('h3');
-                    avisoName.textContent = aviso.avi_name; // Asigna el nombre del aviso
-
-                    // Crea un párrafo para la descripción del aviso
-                    const avisoDescription = document.createElement('p');
-                    avisoDescription.textContent = aviso.avi_description; // Asigna la descripción del aviso
-
-                    // Agrega el nombre y la descripción al elemento del aviso
-                    avisoElement.appendChild(avisoName);
-                    avisoElement.appendChild(avisoDescription);
-                    
-                    // Añade el elemento del aviso al contenedor de avisos
-                    avisosDiv.appendChild(avisoElement);
-                });
-                console.log("Avisos mostrados en el div.");
-            } else {
-                console.error('El div .avisos no se encontró en la vista cargada.');
-            }
-        } else {
-            console.error('Error en la respuesta del servidor:', response.status);
-        }
-    } catch (error) {
-        console.error('Error al cargar avisos:', error);
-    }
-}
-
 async function loadUserInfo() {
     const userId = localStorage.getItem('userId'); // Obtener el ID del usuario del localStorage
 
@@ -177,61 +127,66 @@ window.onload = function() {
     showSection('homea', document.querySelector('.navbar button:nth-child(2)'));
 };
 
-async function loadItineraries() {
+// async function loadItineraries() {
+//     try {
+//         const response = await fetch("http://localhost:4000/itineraries/itis");
+//         if (!response.ok) throw new Error("Error al cargar los itinerarios.");
+        
+//         const itineraries = await response.json();
+//         const itinerariesList = document.getElementById("itineraries-list");
+        
+//         itinerariesList.innerHTML = itineraries.map(itinerary => `
+//             <div class="itinerary-item" onclick="showItineraryPreview('${itinerary.iti_name}', '${itinerary.description}', '${itinerary.start_date}', '${itinerary.end_date}')">
+//                 <h4>${itinerary.iti_name}</h4>
+//             </div>
+//         `).join("");
+//     } catch (error) {
+//         console.error(error);
+//         alert("Hubo un problema al cargar los itinerarios.");
+//     }
+// }
+
+async function loadItinerary() {
     try {
-        const response = await fetch("http://localhost:4000/itineraries/itis");
-        if (!response.ok) throw new Error("Error al cargar los itinerarios.");
-        
+        const response = await fetch('http://localhost:4000/itineraries/itis');
+        if (!response.ok) {
+            throw new Error('Error al cargar el itinerario');
+        }
+
         const itineraries = await response.json();
-        const itinerariesList = document.getElementById("itineraries-list");
-        
-        itinerariesList.innerHTML = itineraries.map(itinerary => `
-            <div class="itinerary-item" onclick="showItineraryPreview('${itinerary.iti_name}', '${itinerary.description}', '${itinerary.start_date}', '${itinerary.end_date}')">
-                <h4>${itinerary.iti_name}</h4>
-            </div>
-        `).join("");
+
+        if (itineraries.length === 0) {
+            document.getElementById('itineraryContainer').innerHTML = '<p>No hay itinerarios disponibles.</p>';
+        } else {
+            const itinerary = itineraries[0]; // Solo hay un itinerario
+            document.getElementById('iti_name').textContent = itinerary.iti_name;
+            document.getElementById('iti_id').textContent = itinerary.iti_id;
+            document.getElementById('iti_description').textContent = itinerary.description;
+            document.getElementById('iti_start_date').textContent =
+                new Date(itinerary.start_date).toLocaleDateString();
+            document.getElementById('iti_end_date').textContent =
+                new Date(itinerary.end_date).toLocaleDateString();
+        }
     } catch (error) {
-        console.error(error);
-        alert("Hubo un problema al cargar los itinerarios.");
+        alert('Hubo un problema al cargar el itinerario. Inténtalo más tarde.');
     }
 }
 
-// Variable para almacenar el itinerario seleccionado
-let currentItinerary = null;
-
-function showItineraryPreview(itinerary) {
-    console.log("Abriendo el modal para el itinerario:", itinerary); // Verificar que la información es correcta
-    currentItinerary = itinerary; // Guardamos el itinerario actual
-
-    // Mostrar la información del itinerario en el modal
-    document.getElementById('itineraryName').textContent = itinerary.iti_name || 'No disponible';
-    document.getElementById('itineraryDescription').textContent = itinerary.description || 'No disponible';
-    document.getElementById('itineraryStartDate').textContent = new Date(itinerary.start_date).toLocaleDateString() || 'Fecha no disponible';
-    document.getElementById('itineraryEndDate').textContent = new Date(itinerary.end_date).toLocaleDateString() || 'Fecha no disponible';
-
-    // Asegúrate de que el modal se está mostrando
-    document.getElementById('itineraryPreviewOverlay').classList.add('show');
-    console.log("Modal debería estar abierto.");
-}
-
-// Función para cerrar el modal
-function closeItineraryPreview() {
-    currentItinerary = null; // Limpiar el itinerario actual
-    document.getElementById('itineraryPreviewOverlay').classList.remove('show'); // Ocultar el modal
-}
-
-// Eliminar el itinerario actual
-async function deleteItinerary() {
-    if (!currentItinerary) return;
+// Eliminar todos los registros de la colección
+async function clearItinerary() {
     try {
-        const response = await fetch(`http://localhost:4000/itineraries/${currentItinerary._id}`, { method: 'DELETE' });
-        if (!response.ok) throw new Error('Error al eliminar el itinerario');
-        
-        loadItineraries(); // Recargar la lista de itinerarios
-        closeItineraryPreview(); // Cerrar la vista previa
+        const response = await fetch('http://localhost:4000/itineraries/clear', {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al eliminar el itinerario');
+        }
+
+        alert('Itinerario eliminado correctamente.');
+        document.getElementById('itineraryContainer').innerHTML = '<p>No hay itinerarios disponibles.</p>';
     } catch (error) {
-        console.error(error);
-        alert('Error al eliminar el itinerario');
+        alert('No se pudo eliminar el itinerario. Inténtalo más tarde.');
     }
 }
 

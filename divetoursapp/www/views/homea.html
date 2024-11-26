@@ -65,6 +65,46 @@
             font-size: small;
         }
 
+        .user-info, .notifications, .view-button {
+            width: 80%;
+            background-color: rgba(123, 85, 151, 0.75);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info img {
+            width: 30%;
+            height: 30%;
+            border-radius: 20%;
+            margin-right: 20px;
+        }
+
+        .user-info div {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: #ffffff; 
+        }
+
+        .user-info h3 {
+            margin: 0;
+            font-size: 1.5rem; 
+        }
+
+        .user-info p {
+            color: #007BFF;
+            font-size: 1rem;
+            margin: 5px 0 0;
+        }
+
         .cuadros {
             display: flex;
             justify-content: space-around;
@@ -128,7 +168,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            color: rgb(0, 0, 0);
+            color: rgb(255, 255, 255);
             font-size: 14px; 
             margin-bottom: 1vh;
         }
@@ -168,6 +208,13 @@
         <div class="header">
             <h2>ADMINISTRADOR</h2>
         </div>
+        <div class="user-info">
+            <img src="../public/img/superguia.png" alt="Usuario">
+            <div>
+                <h3 id="user-name"></h3>
+                <p id="user-email"></p>
+            </div>
+        </div>
         <div class="bienvenida">
             <h2>Mi ubicacion</h2>
             <div id="map"></div>
@@ -186,11 +233,9 @@
         </div>
 
         <!-- Cuadro de comentarios -->
-        <div class="comentarios" id="comments-container" onclick="window.location.href='../views/comments.html'">
-            <h3>Comentarios</h3>
-            <div id="comments-content">
-                <!-- Aquí se cargarán los comentarios dinámicamente -->
-            </div>
+        <div class="comentarios" id="comments-container" onclick="window.location.href='./views/avisos.html'">
+            <h3>Avisos</h3>
+            <img src="../public/img/bell.png" alt="Viajeros">
         </div>
     </div>
 
