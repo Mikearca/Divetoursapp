@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Avisos</title>
     <style>
-        /* Estilos generales */
         body, html {
             margin: 0;
             padding: 0;
@@ -14,10 +13,11 @@
             flex-direction: column;
             align-items: center;
             background-color: #663D85;
+            height: 100vh;
         }
 
         .header {
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
@@ -26,9 +26,7 @@
             justify-content: space-between;
             align-items: center;
             color: white;
-            background: linear-gradient(to bottom, #663D85, rgba(123, 85, 151, 0.75));
             box-sizing: border-box;
-            z-index: 1000;
         }
 
         .header h5 {
@@ -42,26 +40,29 @@
             font-size: 24px;
         }
 
-        .container {
+        /* Contenedor que engloba el contenido */
+        .content-container {
+            width: 90%; /* Ancho del 90% */
+            margin-top: 80px; /* Separación del header */
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 100%;
-            padding-top: 70px; /* Deja espacio para el header fijo */
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         .view-button {
-            width: 80%;
-            margin: 20px auto;
+            width: 100%; 
             background-color: #39243f;
             color: #ffffff;
             border-radius: 15px;
-            padding: 10px 20px;
+            padding: 15px;
             cursor: pointer;
             font-size: 1.2rem;
             text-align: center;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s;
+            margin-bottom: 20px;
         }
 
         .view-button:hover {
@@ -69,7 +70,7 @@
         }
 
         .notifications {
-            width: 80%;
+            width: 100%;
             background-color: rgba(123, 85, 151, 0.75);
             border-radius: 15px;
             padding: 20px;
@@ -77,15 +78,25 @@
             margin-top: 20px;
             text-align: center;
             color: #ffffff;
+            box-sizing: border-box;
+        }
+
+        .notifications h2 {
+            color: #39243f;
         }
 
         .notifications .aviso {
             background-color: #7b5597;
-            padding: 10px;
+            padding: 15px;
             margin: 10px 0;
             border-radius: 10px;
             cursor: pointer;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .notifications .aviso:hover {
+            transform: translateY(-5px);
         }
 
         .notifications .aviso h3 {
@@ -94,31 +105,47 @@
             font-size: 1.2rem;
         }
 
-        /* Modal */
-        .aviso-preview-overlay {
+        .modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.5);
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.3s ease-in-out;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            visibility: hidden;
-            opacity: 0;
-            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .modal.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: #7b5597;
+            padding: 20px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content h1 {
+            color: #ffffff;
         }
 
         .aviso-preview {
-            background: #7b5597;
-            padding: 20px;
+            background: rgb(57, 36, 63);
+            padding: 15px;
             border-radius: 10px;
-            width: 80%;
-            max-width: 400px;
-            text-align: center;
             color: white;
+            margin-top: 15px;
+            text-align: justify;
         }
 
         .btn-group {
@@ -128,150 +155,149 @@
         }
 
         .btn-group button {
-            padding: 8px 16px;
+            padding: 10px 20px;
             font-size: 16px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
         }
 
-        .btn-close { background: #444; color: white; }
-        .btn-save { background: #4caf50; color: white; }
-        .btn-delete { background: #ff4d4d; color: white; }
+        .btn-close {
+            background: #444;
+            color: white;
+            transition: background-color 0.3s;
+        }
 
-        .input-field {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            box-sizing: border-box;
+        .btn-close:hover {
+            background-color: #222;
+        }
+
+        .btn-delete {
+            background: #ff4d4d;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .btn-delete:hover {
+            background-color: #cc2f2f;
+        }
+
+        @media (max-width: 768px) {
+            .content-container {
+                width: 40vh;
+            }
+
+            .view-button {
+                width: 90%;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <div class="header">
         <a href="javascript:window.history.back();">&#8592;</a>
         <h5>Administrador de Avisos</h5>
     </div>
 
-    <!-- Crear Aviso -->
-    <div class="view-button" onclick="window.location.href='../views/avi.html'">Crear Aviso</div>
+    <!-- Contenedor principal -->
+    <div class="content-container">
+        <div class="view-button" onclick="window.location.href='../views/avi.html'">Crear Aviso</div>
 
-    <!-- Lista de Avisos -->
-    <div class="container">
         <div class="notifications">
             <h2>Avisos Creados</h2>
-            <div id="avisos">
-                <!-- Avisos cargados dinámicamente -->
-            </div>
+            <div id="avisos"></div>
         </div>
     </div>
 
     <!-- Modal -->
-    <div class="aviso-preview-overlay" id="avisoPreviewOverlay">
-        <div class="aviso-preview">
-            <h3>Editar Aviso</h3>
-            <input type="text" id="aviNameInput" placeholder="Nombre del aviso" class="input-field" />
-            <textarea id="aviDescriptionInput" placeholder="Descripción del aviso" rows="4" class="input-field"></textarea>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h1 id="modalAvisoTitle"></h1>
+            <div class="aviso-preview">
+                <p></p>
+            </div>
             <div class="btn-group">
-                <button type="button" class="btn-delete" id="deleteAviso">Eliminar</button>
-                <button type="button" class="btn-close" onclick="closePreview()">Cancelar</button>
-                <button type="button" class="btn-save" id="saveAviso">Guardar</button>
+                <button class="btn-delete" onclick="deleteAviso()">Eliminar</button>
+                <button class="btn-close" onclick="closePreview()">Cerrar</button>
             </div>
         </div>
     </div>
 
     <script>
-        const apiUrl = 'http://localhost:4000/avi/avisos'; // Cambia la URL si es necesario
-        const avisosContainer = document.getElementById('avisos');
-        const modal = document.getElementById('avisoPreviewOverlay');
-        const aviNameInput = document.getElementById('aviNameInput');
-        const aviDescriptionInput = document.getElementById('aviDescriptionInput');
         let currentAvisoId = null;
 
-        // Cargar avisos
         async function loadAvisos() {
-            try {
-                const response = await fetch(apiUrl);
-                const avisos = await response.json();
-                avisosContainer.innerHTML = avisos.map(aviso =>
-                    `<div class="aviso" onclick="openPreview(${JSON.stringify(aviso).replace(/"/g, '&quot;')})">
-                        ${aviso.avi_name}
-                    </div>`
-                ).join('');
-            } catch (error) {
-                console.error('Error cargando avisos:', error);
-            }
+    try {
+        const response = await fetch('http://localhost:4000/avi/avisos');
+        if (!response.ok) {
+            throw new Error('Error al cargar los avisos');
         }
 
-        // Abrir modal
-        function openPreview(aviso) {
-            currentAvisoId = aviso._id;
-            aviNameInput.value = aviso.avi_name;
-            aviDescriptionInput.value = aviso.avi_description;
-            modal.style.visibility = 'visible';
-            modal.style.opacity = '1';
+        const avisos = await response.json();
+        const avisosContainer = document.getElementById('avisos');
+
+        // Verificar si no hay avisos
+        if (avisos.length === 0) {
+            avisosContainer.innerHTML = '<p>No hay ningún aviso</p>';
+        } else {
+            avisosContainer.innerHTML = avisos.map(aviso => `
+                <div class="aviso" onclick="openPreview('${aviso._id}', '${aviso.avi_name}', '${aviso.avi_description}')">
+                    <h3>${aviso.avi_name}</h3>
+                </div>
+            `).join('');
+        }
+    } catch (error) {
+        alert('Error cargando avisos: ' + error.message);
+    }
+}
+
+        function openPreview(avisoId, avisoName, avisoDescription) {
+            currentAvisoId = avisoId;
+            document.getElementById('modalAvisoTitle').textContent = avisoName;
+            document.querySelector('.aviso-preview p').textContent = avisoDescription;
+
+            const modal = document.getElementById('modal');
+            modal.classList.add('show');
         }
 
-        // Cerrar modal
         function closePreview() {
-            modal.style.visibility = 'hidden';
-            modal.style.opacity = '0';
-            currentAvisoId = null;
+            const modal = document.getElementById('modal');
+            modal.classList.remove('show');
         }
 
-        // Guardar cambios
-        document.getElementById('saveAviso').addEventListener('click', async () => {
-            if (!currentAvisoId) return;
-
-            const updatedAviso = {
-                avi_name: aviNameInput.value,
-                avi_description: aviDescriptionInput.value
-            };
+        async function deleteAviso() {
+            if (!currentAvisoId) {
+                alert('Error: No se ha seleccionado un aviso para eliminar.');
+                return;
+            }
 
             try {
-                const response = await fetch(`${apiUrl}/${currentAvisoId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(updatedAviso)
+                const response = await fetch(`http://localhost:4000/avi/avisos/${currentAvisoId}`, {
+                    method: 'DELETE',
                 });
 
-                if (response.ok) {
-                    alert('Aviso actualizado');
-                    closePreview();
-                    loadAvisos();
+                let result;
+
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    result = await response.json();
                 } else {
-                    alert('Error al actualizar');
+                    throw new Error('Respuesta inesperada del servidor. Verifica el backend.');
                 }
-            } catch (error) {
-                console.error('Error actualizando aviso:', error);
-            }
-        });
 
-        // Eliminar aviso
-        document.getElementById('deleteAviso').addEventListener('click', async () => {
-            if (!currentAvisoId) return;
-
-            if (!confirm('¿Eliminar aviso?')) return;
-
-            try {
-                const response = await fetch(`${apiUrl}/${currentAvisoId}`, { method: 'DELETE' });
-                if (response.ok) {
-                    alert('Aviso eliminado');
-                    closePreview();
-                    loadAvisos();
-                } else {
-                    alert('Error al eliminar');
+                if (!response.ok) {
+                    throw new Error(result.message || 'Error eliminando aviso');
                 }
-            } catch (error) {
-                console.error('Error eliminando aviso:', error);
-            }
-        });
 
-        document.addEventListener('DOMContentLoaded', loadAvisos);
+                alert(result.message);  
+                closePreview();       
+                loadAvisos();           
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        loadAvisos();
     </script>
 </body>
 </html>

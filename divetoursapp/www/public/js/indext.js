@@ -35,6 +35,10 @@ function showSection(viewName, buttonElement) {
                 initializeMap(); 
             }
 
+            if (viewName === 'trav') {
+                loadItinerary()
+            }
+
         })
         .catch(error => {
             console.error('Error al cargar la vista parcial:', error);
@@ -155,37 +159,28 @@ async function loadUserInfo() {
 
 
 // VISTA IZQUIERDA
-async function verificarCodigo() {
-    const idItinerario = document.getElementById("codigoItinerario").value;
-    const mensajeEl = document.getElementById("mensaje");
-    mensajeEl.textContent = "";  // Limpiar mensaje previo
-
-    const userId = localStorage.getItem("userId");  // Suponiendo que el ID del usuario esté en localStorage
-
-    if (!userId) {
-        mensajeEl.textContent = "No se encontró el ID del usuario. Asegúrate de haber iniciado sesión.";
-        return;
-    }
-
+async function loadItinerary() {
     try {
-        const response = await fetch(`http://localhost:4000/itineraries/verificar/${idItinerario}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ userId: userId })  // Enviar el ID del usuario junto con la solicitud
-        });
+        const response = await fetch('http://localhost:4000/itineraries/itis');
+        if (!response.ok) {
+            throw new Error('Error al cargar el itinerario');
+        }
 
-        const data = await response.json();
-        if (response.ok) {
-            // Mostrar mensaje de éxito o redirigir
-            window.location.href = "divetoursapp/www/login.html";
+        const itineraries = await response.json();
+
+        if (itineraries.length === 0) {
+            document.getElementById('itineraryContainer').innerHTML = '<p>No hay itinerarios disponibles.</p>';
         } else {
-            // Mostrar mensaje de error si el código es incorrecto o expirado
-            mensajeEl.textContent = data.message || 'Error en la verificación del código';
+            const itinerary = itineraries[0]; // Solo hay un itinerario
+            document.getElementById('iti_name').textContent = itinerary.iti_name;
+            document.getElementById('iti_id').textContent = itinerary.iti_id;
+            document.getElementById('iti_description').textContent = itinerary.description;
+            document.getElementById('iti_start_date').textContent =
+                new Date(itinerary.start_date).toLocaleDateString();
+            document.getElementById('iti_end_date').textContent =
+                new Date(itinerary.end_date).toLocaleDateString();
         }
     } catch (error) {
-        console.error('Error:', error);
-        mensajeEl.textContent = 'Hubo un problema con la solicitud';
+        alert('Hubo un problema al cargar el itinerario. Inténtalo más tarde.');
     }
 }

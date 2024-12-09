@@ -148,8 +148,6 @@
     <div class="main-content">
         <h5>Itinerario de viaje</h5>
         
-        <button class="create-button" onclick="formiti()">Crear Itinerario</button>
-        
         <div class="container" id="itineraryContainer">
             <div class="sub-container1">
                 <h5>Destino</h5>
@@ -172,57 +170,38 @@
                 <p id="iti_end_date">Cargando...</p>
             </div>
         </div>
-        
-        <button class="delete-btn" onclick="clearItinerary()">Eliminar Itinerario</button>
     </div>
 
     <div class="footer">
     </div>
     <script>
-document.addEventListener('DOMContentLoaded', loadItinerary);
+        document.addEventListener('DOMContentLoaded', loadItinerary);
 
-async function loadItinerary() {
-    try {
-        const response = await fetch('http://localhost:4000/itineraries/itis');
-        if (!response.ok) {
-            throw new Error('Error al cargar el itinerario');
+        async function loadItinerary() {
+            try {
+                const response = await fetch('http://localhost:4000/itineraries/itis');
+                if (!response.ok) {
+                    throw new Error('Error al cargar el itinerario');
+                }
+
+                const itineraries = await response.json();
+
+                if (itineraries.length === 0) {
+                    document.getElementById('itineraryContainer').innerHTML = '<p>No hay itinerarios disponibles.</p>';
+                } else {
+                    const itinerary = itineraries[0]; 
+                    document.getElementById('iti_name').textContent = itinerary.iti_name;
+                    document.getElementById('iti_id').textContent = itinerary.iti_id;
+                    document.getElementById('iti_description').textContent = itinerary.description;
+                    document.getElementById('iti_start_date').textContent =
+                        new Date(itinerary.start_date).toLocaleDateString();
+                    document.getElementById('iti_end_date').textContent =
+                        new Date(itinerary.end_date).toLocaleDateString();
+                }
+            } catch (error) {
+                alert('Hubo un problema al cargar el itinerario. Inténtalo más tarde.');
+            }
         }
-
-        const itineraries = await response.json();
-
-        if (itineraries.length === 0) {
-            document.getElementById('itineraryContainer').innerHTML = '<p>No hay itinerarios disponibles.</p>';
-        } else {
-            const itinerary = itineraries[0]; 
-            document.getElementById('iti_name').textContent = itinerary.iti_name;
-            document.getElementById('iti_id').textContent = itinerary.iti_id;
-            document.getElementById('iti_description').textContent = itinerary.description;
-            document.getElementById('iti_start_date').textContent =
-                new Date(itinerary.start_date).toLocaleDateString();
-            document.getElementById('iti_end_date').textContent =
-                new Date(itinerary.end_date).toLocaleDateString();
-        }
-    } catch (error) {
-        alert('Hubo un problema al cargar el itinerario. Inténtalo más tarde.');
-    }
-}
-
-async function clearItinerary() {
-    try {
-        const response = await fetch('http://localhost:4000/itineraries/clear', {
-            method: 'DELETE',
-        });
-
-        if (!response.ok) {
-            throw new Error('Error al eliminar el itinerario');
-        }
-
-        alert('Itinerario eliminado correctamente.');
-        document.getElementById('itineraryContainer').innerHTML = '<p>No hay itinerarios disponibles.</p>';
-    } catch (error) {
-        alert('No se pudo eliminar el itinerario. Inténtalo más tarde.');
-    }
-}
     </script>
 </body>
 </html>

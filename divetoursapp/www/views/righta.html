@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Avisos</title>
     <style>
-        /* Estilos generales */
         body, html {
             margin: 0;
             padding: 0;
@@ -23,7 +22,6 @@
             width: 100%;
         }
 
-        /* Cuadro centrado con los datos del usuario */
         .user-info, .notifications, .view-button {
             width: 80%;
             background-color: rgba(123, 85, 151, 0.75);
@@ -79,8 +77,8 @@
         .notifications h2 {
             margin: 0;
             margin-bottom: 10px;
-            font-size: 1.5rem;
             color: #ffffff;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
         }
 
         .notifications .aviso {
@@ -108,9 +106,12 @@
 </head>
 <body>
 
+    <div class="header">
+        <h2>Comentarios</h2>
+    </div>
+    
     <div class="container">
         <div class="notifications">
-            <h2>Avisos Creados</h2>
             <div class="avisos" id="avisos"></div>
         </div>
     </div>

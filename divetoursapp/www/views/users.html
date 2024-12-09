@@ -6,7 +6,6 @@
     <title>Lista de Usuarios</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-
         body, html {
             margin: 0;
             padding: 0;
@@ -21,9 +20,7 @@
         }
 
         .header {
-            position: relative; /* Cambiado de absolute a relative */
-            top: 0; /* Este valor ya no es necesario */
-            left: 0; /* Este valor ya no es necesario */
+            position: relative;
             width: 100%;
             padding: 15px;
             display: flex;
@@ -46,22 +43,56 @@
         }
 
         .list-container {
+            text-align: center;
             width: 90%;
             max-width: 500px;
             background-color: #7b5597bf;
             border-radius: 15px;
-            padding: 20px;
+            padding: 30px 20px; /* Aumentado el padding para más espacio */
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             box-sizing: border-box;
-            margin-top: 140px;
+            margin-top: 20px;
         }
 
+
         .user-item {
+            padding: 15px;
+            background-color: #5c3f7e;
+            border-radius: 10px;
+            margin: 15px 0; /* Aumentado el margen entre los viajeros */
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #4d2b61;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .user-item:hover {
+            background-color: #7b5597;
+            transform: translateY(-5px);
+        }
+
+
+        .user-item span {
+            font-size: 16px;
+            color: white;
+        }
+
+        .user-item .fa {
+            font-size: 20px;
+            color: white;
+        }
+
+        .user-item .details-btn {
+            padding: 8px 16px;
+            background-color: #663D85;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
         }
 
         .delete-btn, .edit-btn {
@@ -143,20 +174,33 @@
 
         .search-bar input {
             width: 90%;
-            padding: 12px; /* Aumentar el padding para hacerla más grande */
+            padding: 12px;
             font-size: 16px;
             border-radius: 5px;
             border: none;
             background-color: #281C31;
-            color: white; /* Asegúrate de que el texto sea visible */
+            color: white;
         }
+
+        .role-toggle {
+            cursor: pointer;
+            padding: 8px 12px;
+            background-color: #663D85;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            margin-top: 10px;
+            width: 95%;
+        }
+
     </style>
 </head>
 <body>
 
     <div class="header">
         <a href="javascript:window.history.back();">&#8592;</a>
-        <h2>Lista de Usuarios</h2>
+        <h5>Lista de Usuarios</h5>
     </div>
 
     <div class="search-bar">
@@ -176,6 +220,7 @@
             <input type="text" id="userLastName" placeholder="Apellido">
             <input type="email" id="userEmail" placeholder="Correo">
             <input type="text" id="userRole" placeholder="Rol">
+            <button class="role-toggle" id="roleToggle" onclick="toggleRole()">Cambiar Rol</button>
             <div class="btn-group">
                 <button class="btn-close" onclick="closeUserPreview()">Cerrar</button>
                 <button class="btn-edit" onclick="saveUserChanges()">Guardar</button>
@@ -265,15 +310,24 @@
         }
 
         function filterUsers() {
-        const input = document.getElementById('searchInput');
-        const filter = input.value.toLowerCase();
-        const userItems = document.querySelectorAll('.user-item');
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const userItems = document.querySelectorAll('.user-item');
 
-        userItems.forEach(item => {
-            const userName = item.innerText.toLowerCase();
-            item.style.display = userName.includes(filter) ? 'flex' : 'none';
-        });
-    }
+            userItems.forEach(item => {
+                const userName = item.innerText.toLowerCase();
+                item.style.display = userName.includes(filter) ? 'flex' : 'none';
+            });
+        }
+
+        // Toggle de roles
+        function toggleRole() {
+            const roles = ['user', 'admin', 'traveler'];
+            let currentRole = document.getElementById('userRole').value;
+            let nextRoleIndex = (roles.indexOf(currentRole) + 1) % roles.length;
+            let nextRole = roles[nextRoleIndex];
+            document.getElementById('userRole').value = nextRole;
+        }
 
         loadUsers();
     </script>

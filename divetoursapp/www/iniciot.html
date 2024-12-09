@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplicación de Divertours</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+            background-color: #663D85;
+            overflow-x: hidden;
+        }
+
+        .cuadro-centro {
+            width: 95%;
+            max-width: 600px;
+            background-color: rgba(102, 61, 133, 0.7);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            margin-top: 20px; 
+        }
+
+        .cuadro-centro h2 {
+            margin-bottom: 20px;
+        }
+
+        .cuadro-centro p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .cuadro-centro input,
+        .cuadro-centro button {
+            width: 80%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+        }
+
+        .cuadro-centro button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        .cuadro-centro a {
+            color: rgb(255, 255, 255);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #101C1C;
+            border-radius: 10px;
+            width: 95%;
+            height: 8%;
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        .navbar button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            position: relative;
+            z-index: 101; 
+        }
+
+        .navbar img {
+            width: 6vh;
+            height: 6vh;
+            z-index: 101;
+        }
+
+        .highlight-box {
+            position: absolute;
+            width: 10vh;
+            height: 10vh;
+            background-color: #101C1C; 
+            border-radius: 10px; 
+            z-index: 10; 
+            transition: all 0.5s ease;
+            pointer-events: none;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                height: 25vh;
+            }
+
+            .navbar img {
+                width: 5vh;
+                height: 5vh;
+            }
+
+            .main-content {
+                font-size: 14px;
+            }
+
+            .highlight-box {
+                width: 15vw;
+                height: 20vw;
+            }
+        }
+
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+    </style>
+    
+</head>
+<body>
+    <div class="main-content" id="main-content">
+    </div>
+
+    <div class="navbar">
+        <button onclick="showSection('trav', this)">
+            <img class="nave" src="public/img/planner.png" alt="ITINERARIO">
+        </button>
+        <button onclick="showSection('home', this)">
+            <img class="nave" src="public/img/home.png" alt="INICIO">
+        </button>
+        <button onclick="showSection('right', this)">
+            <img class="nave" src="public/img/traveller.png" alt="CUENTA">
+        </button>
+    </div>
+
+    <div class="highlight-box" id="highlight-box"></div>
+    <script src="public/js/indext.js"></script>
+</body>
+</html>

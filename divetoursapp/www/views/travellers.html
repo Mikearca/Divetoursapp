@@ -20,9 +20,9 @@
         }
 
         .header {
-            position: absolute;
-            top: 0;
-            left: 0;
+            position: relative; /* Cambiado de absolute a relative */
+            top: 0; /* Este valor ya no es necesario */
+            left: 0; /* Este valor ya no es necesario */
             width: 100%;
             padding: 15px;
             display: flex;
@@ -77,25 +77,179 @@
         }
 
         .list-container {
+            text-align: center;
             width: 90%;
             max-width: 500px;
             background-color: #7b5597bf;
             border-radius: 15px;
-            padding: 20px;
+            padding: 30px 20px; /* Aumentado el padding para más espacio */
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             box-sizing: border-box;
-            margin-top: 140px; /* Espacio para que no se solape con el header */
+            margin-top: 20px;
         }
 
-        .traveler-item {
-            padding: 10px 0;
-            border-bottom: 1px solid #4d2b61;
+
+        .user-item {
+            padding: 15px;
+            background-color: #5c3f7e;
+            border-radius: 10px;
+            margin: 15px 0; /* Aumentado el margen entre los viajeros */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .user-item:hover {
+            background-color: #7b5597;
+            transform: translateY(-5px);
+        }
+
+
+        .user-item span {
+            font-size: 16px;
+            color: white;
+        }
+
+        .user-item .fa {
+            font-size: 20px;
+            color: white;
+        }
+
+        .user-item .details-btn {
+            padding: 8px 16px;
+            background-color: #663D85;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .user-item .details-btn:hover {
+            background-color: #4d2b61;
         }
 
         .no-travelers {
             text-align: center;
             font-size: 16px;
             color: #ddd;
+        }
+
+        /* User preview modal */
+        .user-preview-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .user-preview {
+            background: #7b5597;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .user-preview h3 {
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        .user-preview input {
+            width: 90%;
+            padding: 8px;
+            margin: 8px 0;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        .role-toggle {
+            display: inline-block;
+            background-color: #4caf50;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .btn-group button {
+            padding: 8px 16px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-close { background: #444; }
+        .btn-edit { background: #4caf50; }
+        .btn-delete { background: #ff4d4d; }
+
+        /* Show overlay */
+        .user-preview-overlay.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .search-bar {
+            margin: 20px 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        .search-bar input {
+            width: 85%;
+            padding: 12px; /* Aumentar el padding para hacerla más grande */
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            background-color: #281C31;
+            color: white; /* Asegúrate de que el texto sea visible */
+        }
+
+        .role-toggle {
+            cursor: pointer;
+            padding: 8px 12px;
+            background-color: #663D85;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            margin-top: 10px;
+            width: 95%;
+        }
+
+        .finish-trip-btn {
+            padding: 15px 30px;
+            background-color: #281C31;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 15px;
+            margin-top: 30px;
         }
     </style>
 </head>
@@ -106,47 +260,157 @@
         <h5>Lista de Viajeros</h5>
     </div>
 
-    <!-- Cuadro para la lista de viajeros -->
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Buscar Viajero" onkeyup="filterUsers()">
+    </div>
+
     <div class="list-container" id="travelerList">
         <div class="no-travelers">Cargando viajeros...</div>
     </div>
 
+    <div class="user-preview-overlay" id="userPreviewOverlay">
+        <div class="user-preview">
+            <h3>Detalles del Usuario</h3>
+            <input type="text" id="userName" placeholder="Nombre">
+            <input type="text" id="userLastName" placeholder="Apellido">
+            <input type="email" id="userEmail" placeholder="Correo">
+            <input type="text" id="userRole" placeholder="Rol">
+            <button class="role-toggle" id="roleToggle" onclick="toggleRole()">Cambiar Rol</button>
+            <!-- <div id="roleToggle" class="role-toggle" onclick="toggleRole()">Seleccionar Rol: user</div> -->
+            
+            <div class="btn-group">
+                <button class="btn-close" onclick="closeUserPreview()">Cerrar</button>
+                <button class="btn-edit" onclick="saveUserChanges()">Guardar</button>
+                <button class="btn-delete" onclick="deleteUser()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="finish-trip-btn" onclick="assignRoles()">Terminar Viaje</button>
+
     <script>
-        // Función para regresar a la vista anterior
         function goBack() {
             window.location.href = "/www/inicioa.html";
         }
 
-        // Cargar la lista de viajeros
-        async function loadTravelers() {
+        async function loadTravelers() {  
             try {
-                const response = await fetch('http://localhost:4000/users/users'); 
-                if (!response.ok) throw new Error('Error al obtener la lista de viajeros');
-                
+                const response = await fetch('http://localhost:4000/users/users');
                 const users = await response.json();
-                const travelers = users.filter(user => user.role === 'traveler');
+                const regularUsers = users.filter(user => user.rol === 'traveler');
                 
-                const travelerList = document.getElementById('travelerList');
-                travelerList.innerHTML = ''; // Limpiar el contenido previo
+                const userList = document.getElementById('travelerList');
+                userList.innerHTML = '';
                 
-                if (travelers.length === 0) {
-                    travelerList.innerHTML = '<div class="no-travelers">No hay ningún viajero</div>';
+                if (regularUsers.length === 0) {
+                    userList.innerHTML = '<div class="no-users">No hay ningún usuario</div>';
                 } else {
-                    travelers.forEach(traveler => {
-                        const travelerItem = document.createElement('div');
-                        travelerItem.className = 'traveler-item';
-                        travelerItem.textContent = traveler.name; // Ajusta esto según la estructura de tu base de datos
-                        travelerList.appendChild(travelerItem);
+                    regularUsers.forEach(user => {
+                        const userItem = document.createElement('div');
+                        userItem.className = 'user-item';
+                        userItem.innerHTML = `<span>${user.name} ${user.last_name}</span>`;
+                        userItem.addEventListener('click', () => showUserPreview(user));
+                        userList.appendChild(userItem);
                     });
                 }
             } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('travelerList').innerHTML = '<div class="no-travelers">Error al cargar viajeros</div>';
+                console.error(error);
+                document.getElementById('userList').innerHTML = '<div class="no-users">Error al cargar usuarios</div>';
             }
         }
 
-        // Llamar a la función para cargar los viajeros al cargar la página
-        loadTravelers();
+        function filterUsers() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const userItems = document.querySelectorAll('.user-item');
+
+            userItems.forEach(item => {
+                const userName = item.innerText.toLowerCase();
+                item.style.display = userName.includes(filter) ? 'flex' : 'none';
+            });
+        }
+
+        let currentUser = null;
+
+        async function deleteUser() {
+            if (!currentUser) return;
+            try {
+                const response = await fetch(`http://localhost:4000/users/user/${currentUser._id}`, { method: 'DELETE' });
+                if (!response.ok) throw new Error('Error al eliminar el usuario');
+                loadTravelers();
+                closeUserPreview();
+            } catch (error) {
+                console.error(error);
+                alert('Error al eliminar el usuario');
+            }
+        }
+
+        async function saveUserChanges() {
+            if (!currentUser) return;
+            const updatedUser = {
+                name: document.getElementById('userName').value,
+                last_name: document.getElementById('userLastName').value,
+                email: document.getElementById('userEmail').value,
+                rol: document.getElementById('userRole').value
+            };
+
+            try {
+                const response = await fetch(`http://localhost:4000/users/users/${currentUser._id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedUser)
+                });
+                if (!response.ok) throw new Error('Error al guardar cambios');
+                loadTravelers();
+                closeUserPreview();
+            } catch (error) {
+                console.error(error);
+                alert('Error al guardar cambios');
+            }
+        }
+
+        function showUserPreview(user) {
+            currentUser = user;
+            document.getElementById('userName').value = user.name;
+            document.getElementById('userLastName').value = user.last_name;
+            document.getElementById('userEmail').value = user.email;
+            document.getElementById('userRole').value = user.rol;
+            document.getElementById('userPreviewOverlay').classList.add('show');
+        }
+
+        function closeUserPreview() {
+            currentUser = null;
+            document.getElementById('userPreviewOverlay').classList.remove('show');
+        }
+
+        function toggleRole() {
+            const roles = ['user', 'admin', 'traveler'];
+            let currentRole = document.getElementById('userRole').value;
+            let nextRoleIndex = (roles.indexOf(currentRole) + 1) % roles.length;
+            let nextRole = roles[nextRoleIndex];
+            document.getElementById('userRole').value = nextRole;
+        }
+
+        async function assignRoles() {
+        try {
+            const response = await fetch('http://localhost:4000/users/asign', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            });
+
+            const data = await response.json();
+            alert(data.message); // Muestra el mensaje de éxito
+        } catch (error) {
+            console.error('Error al asignar los roles:', error);
+            alert('Error al asignar los roles');
+        }
+        }
+
+
+        // Cargar los viajeros cuando la página esté lista
+        window.onload = loadTravelers;
     </script>
 
 </body>

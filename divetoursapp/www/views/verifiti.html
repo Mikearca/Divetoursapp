@@ -11,7 +11,6 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: none;
             background-color: #663D85;
         }
 
@@ -97,6 +96,22 @@
             font-size: 14px;
             text-align: center;
         }
+
+        #userIdContainer {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            text-align: center;
+            background-color: #3e2e53;
+            color: white;
+            border-radius: 10px;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        #userIdContainer strong {
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -108,42 +123,56 @@
     <div class="container">
         <h1 class="title">Inscribirse a un Viaje</h1>
         <p class="description">Para ver el itinerario debe estar inscrito a un viaje. Por favor ingresa el código de viaje.</p>
-        <input type="text" class="input" id="codigoItinerario" placeholder="Ingresa código">
-        <button class="button" onclick="verificarCodigo()">Inscribirme</button>
+        <input type="text" class="input" id="iti_id" placeholder="Ingresa el código del itinerario" maxlength="5" required />
+        <div id="userIdContainer">
+            <strong>Usuario ID:</strong> <span id="userIdDisplay">Cargando...</span>
+        </div>
+        <button class="button" id="enrollButton" onclick="enrollToItinerary()">Inscribirme</button>
         <p class="message" id="mensaje"></p>
     </div>
 
     <script>
-async function verificarCodigo() {
-    const idItinerario = document.getElementById("codigoItinerario").value;
-    const mensajeEl = document.getElementById("mensaje");
-    mensajeEl.textContent = ""; 
+        document.addEventListener("DOMContentLoaded", () => {
+            const userId = localStorage.getItem('userId');
+            const userIdDisplay = document.getElementById('userIdDisplay');
+            if (userId) {
+                userIdDisplay.textContent = userId;
+            } else {
+                userIdDisplay.textContent = 'No disponible (verifique login)';
+            }
+        });
 
-    const userId = localStorage.getItem("userId"); 
+        async function enrollToItinerary() {
+    const iti_id = document.getElementById('iti_id').value.trim();
+    const userId = localStorage.getItem('userId'); // Asegúrate de que este valor esté almacenado al iniciar sesión
+
+    if (!/^\d{5}$/.test(iti_id)) {
+        document.getElementById('mensaje').innerText = 'El código del itinerario debe tener 5 dígitos.';
+        return;
+    }
 
     if (!userId) {
-        mensajeEl.textContent = "No se encontró el ID del usuario. Asegúrate de haber iniciado sesión.";
+        document.getElementById('mensaje').innerText = 'Usuario no autenticado. Inicie sesión nuevamente.';
         return;
     }
 
     try {
-        const response = await fetch(`http://localhost:4000/itineraries/verificar/${idItinerario}`, {
+        const response = await fetch(`http://localhost:4000/itineraries/enroll/${iti_id}`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ userId: userId }) 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId }),
         });
 
-        const data = await response.json();
-        if (response.ok) {
-            window.location.href = "divetoursapp/www/login.html";
+        const result = await response.json();
+        if (response.ok && result.success) {
+            alert(result.message);
+            window.location.href = '../login.html';
         } else {
-            mensajeEl.textContent = data.message || 'Error en la verificación del código';
+            document.getElementById('mensaje').innerText = result.message || 'No se pudo completar la inscripción.';
         }
     } catch (error) {
-        console.error('Error:', error);
-        mensajeEl.textContent = 'Hubo un problema con la solicitud';
+        console.error('Error al inscribirse:', error);
+        document.getElementById('mensaje').innerText = 'Error al conectarse con el servidor. Intenta nuevamente.';
     }
 }
     </script>
