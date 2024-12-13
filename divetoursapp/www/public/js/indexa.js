@@ -98,7 +98,7 @@ async function loadUserInfo() {
     }
 
     try {
-        const response = await fetch(`http://localhost:4000/users/user/${userId}`);
+        const response = await fetch(`https://divertoursapi-1.onrender.com/users/user/${userId}`);
         
         if (!response.ok) {
             throw new Error(`Error en la respuesta del servidor: ${response.status}`);
@@ -148,7 +148,7 @@ window.onload = function() {
 
 async function loadItinerary() {
     try {
-        const response = await fetch('http://localhost:4000/itineraries/itis');
+        const response = await fetch('https://divertoursapi-1.onrender.com/itineraries/itis');
         if (!response.ok) {
             throw new Error('Error al cargar el itinerario');
         }
@@ -175,7 +175,7 @@ async function loadItinerary() {
 // Eliminar todos los registros de la colección
 async function clearItinerary() {
     try {
-        const response = await fetch('http://localhost:4000/itineraries/clear', {
+        const response = await fetch('https://divertoursapi-1.onrender.com/itineraries/clear', {
             method: 'DELETE',
         });
 

@@ -82,7 +82,7 @@ function initializeMap() {
 // VISTA DERECHA
 async function loadAvisos() {
     try {
-        const response = await fetch('http://localhost:4000/avi/avisos');
+        const response = await fetch('https://divertoursapi-1.onrender.com/avi/avisos');
         if (response.ok) {
             const avisos = await response.json();
 
@@ -136,7 +136,7 @@ async function loadUserInfo() {
     }
 
     try {
-        const response = await fetch(`http://localhost:4000/users/user/${userId}`);
+        const response = await fetch(`https://divertoursapi-1.onrender.com/users/user/${userId}`);
         
         if (!response.ok) {
             throw new Error(`Error en la respuesta del servidor: ${response.status}`);
@@ -168,7 +168,7 @@ async function verificarCodigo() {
     }
 
     try {
-        const response = await fetch(`http://localhost:4000/itineraries/verificar/${idItinerario}`, {
+        const response = await fetch(`https://divertoursapi-1.onrender.com/itineraries/verificar/${idItinerario}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -98,15 +98,9 @@
         }
 
         #userIdContainer {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            text-align: center;
-            background-color: #3e2e53;
-            color: white;
-            border-radius: 10px;
-            font-size: 14px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            visibility: hidden; /* Oculta el contenedor pero mantiene el comportamiento */
+            height: 0; /* Ajusta el espacio ocupado a cero */
+            overflow: hidden; /* Asegura que no se muestre contenido */
         }
 
         #userIdContainer strong {
@@ -143,38 +137,38 @@
         });
 
         async function enrollToItinerary() {
-    const iti_id = document.getElementById('iti_id').value.trim();
-    const userId = localStorage.getItem('userId'); // Asegúrate de que este valor esté almacenado al iniciar sesión
+            const iti_id = document.getElementById('iti_id').value.trim();
+            const userId = localStorage.getItem('userId');
 
-    if (!/^\d{5}$/.test(iti_id)) {
-        document.getElementById('mensaje').innerText = 'El código del itinerario debe tener 5 dígitos.';
-        return;
-    }
+            if (!/^\d{5}$/.test(iti_id)) {
+                document.getElementById('mensaje').innerText = 'El código del itinerario debe tener 5 dígitos.';
+                return;
+            }
 
-    if (!userId) {
-        document.getElementById('mensaje').innerText = 'Usuario no autenticado. Inicie sesión nuevamente.';
-        return;
-    }
+            if (!userId) {
+                document.getElementById('mensaje').innerText = 'Usuario no autenticado. Inicie sesión nuevamente.';
+                return;
+            }
 
-    try {
-        const response = await fetch(`http://localhost:4000/itineraries/enroll/${iti_id}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userId }),
-        });
+            try {
+                const response = await fetch(`https://divertoursapi-1.onrender.com/itineraries/enroll/${iti_id}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId }),
+                });
 
-        const result = await response.json();
-        if (response.ok && result.success) {
-            alert(result.message);
-            window.location.href = '../login.html';
-        } else {
-            document.getElementById('mensaje').innerText = result.message || 'No se pudo completar la inscripción.';
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    alert(result.message);
+                    window.location.href = '../login.html';
+                } else {
+                    document.getElementById('mensaje').innerText = result.message || 'No se pudo completar la inscripción.';
+                }
+            } catch (error) {
+                console.error('Error al inscribirse:', error);
+                document.getElementById('mensaje').innerText = 'Error al conectarse con el servidor. Intenta nuevamente.';
+            }
         }
-    } catch (error) {
-        console.error('Error al inscribirse:', error);
-        document.getElementById('mensaje').innerText = 'Error al conectarse con el servidor. Intenta nuevamente.';
-    }
-}
     </script>
 </body>
 </html>

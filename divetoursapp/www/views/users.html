@@ -235,7 +235,7 @@
         async function deleteUser() {
             if (!currentUser) return;
             try {
-                const response = await fetch(`http://localhost:4000/users/user/${currentUser._id}`, { method: 'DELETE' });
+                const response = await fetch(`https://divertoursapi-1.onrender.com/users/user/${currentUser._id}`, { method: 'DELETE' });
                 if (!response.ok) throw new Error('Error al eliminar el usuario');
                 loadUsers();
                 closeUserPreview();
@@ -255,7 +255,7 @@
             };
 
             try {
-                const response = await fetch(`http://localhost:4000/users/users/${currentUser._id}`, {
+                const response = await fetch(`https://divertoursapi-1.onrender.com/users/users/${currentUser._id}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(updatedUser)
@@ -285,7 +285,7 @@
 
         async function loadUsers() {  
             try {
-                const response = await fetch('http://localhost:4000/users/users');
+                const response = await fetch('https://divertoursapi-1.onrender.com/users/users');
                 const users = await response.json();
                 const regularUsers = users.filter(user => user.rol === 'user');
                 

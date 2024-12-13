@@ -179,7 +179,7 @@
 
         async function loadItinerary() {
             try {
-                const response = await fetch('http://localhost:4000/itineraries/itis');
+                const response = await fetch('https://divertoursapi-1.onrender.com/itineraries/itis');
                 if (!response.ok) {
                     throw new Error('Error al cargar el itinerario');
                 }
