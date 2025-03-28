@@ -8,16 +8,14 @@
     <content src="index.html" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
+
+    <!-- Configuración específica de Android -->
     <platform name="android">
-        <!-- MDPI -->
+        <!-- Iconos para diferentes densidades -->
         <icon src="res/android/mipmap-mdpi/ic_launcher.png" density="mdpi" />
-        <!-- HDPI -->
         <icon src="res/android/mipmap-hdpi/ic_launcher.png" density="hdpi" />
-        <!-- XHDPI -->
         <icon src="res/android/mipmap-xhdpi/ic_launcher.png" density="xhdpi" />
-        <!-- XXHDPI -->
         <icon src="res/android/mipmap-xxhdpi/ic_launcher.png" density="xxhdpi" />
-        <!-- XXXHDPI -->
         <icon src="res/android/mipmap-xxxhdpi/ic_launcher.png" density="xxxhdpi" />
     </platform>
 </widget>

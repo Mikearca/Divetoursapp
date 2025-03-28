@@ -19,16 +19,20 @@
   "devDependencies": {
     "cordova-android": "^13.0.0",
     "cordova-browser": "^7.0.0",
+    "cordova-plugin-geolocation": "^5.0.0",
     "cordova-plugin-screen-orientation": "^3.0.4",
     "es6-promise-plugin": "^4.2.2"
   },
   "cordova": {
     "platforms": [
-      "android",
-      "browser"
+      "browser",
+      "android"
     ],
     "plugins": {
-      "cordova-plugin-screen-orientation": {}
+      "cordova-plugin-screen-orientation": {},
+      "cordova-plugin-geolocation": {
+        "GPS_REQUIRED": "true"
+      }
     }
   }
 }

@@ -62,6 +62,9 @@
             padding: 15px;
             width: 48%;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            overflow: hidden; /* Evita que el contenido se salga */
+            text-overflow: ellipsis; /* Añade puntos suspensivos si hay desbordamiento de texto */
+            max-height: 200px; /* Limita la altura máxima del contenedor */
         }
 
         .sub-container1,
@@ -107,6 +110,7 @@
         .sub-container p {
             font-size: 16px;
             text-align: left;
+            overflow: auto;
         }
 
         .delete-btn {

@@ -58,26 +58,33 @@ function initializeMap() {
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
+        document.addEventListener('deviceready', function() {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
 
-                map.setView([lat, lng], 13);
+                    map.setView([lat, lng], 13);
 
-                var marker = L.marker([lat, lng]).addTo(map)
-                    .bindPopup("¡Estás aquí!")
-                    .openPopup();
-            }, function(error) {
-                console.warn('ERROR(' + error.code + '): ' + error.message);
-            });
-        } else {
-            console.error("El navegador no soporta la geolocalización.");
-        }
+                    var marker = L.marker([lat, lng]).addTo(map)
+                        .bindPopup("¡Estás aquí!")
+                        .openPopup();
+                },
+                function(error) {
+                    console.warn('ERROR(' + error.code + '): ' + error.message);
+                },
+                {
+                    enableHighAccuracy: true, // Usa GPS de alta precisión
+                    timeout: 5000, // Tiempo límite para obtener la ubicación
+                    maximumAge: 0 // No usar caché
+                }
+            );
+        });
     } else {
         console.error('El div del mapa no existe o no se ha cargado correctamente.');
     }
 }
+
 
 // VISTA DERECHA
 async function loadAvisos() {

@@ -4,16 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box; /* Para evitar desbordes */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
         .header {
-            top: 0;
-            left: 0;
             width: 100%;
             height: 20vh;
             background: white;
@@ -21,16 +27,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
         }
 
         .header img.logo {
-            max-height: 40%;
-        }
-
-        .header button img {
-            width: 30px;
-            height: 30px;
+            max-height: 50%;
+            width: auto;
         }
 
         .main-content {
@@ -40,42 +41,33 @@
             align-items: center;
             color: white;
             text-align: center;
-            background-color: none;
-            position: relative;
-            height: auto;
-        }
-
-        .main-content.visible {
-            opacity: 1;
-        }
-
-        .main-content.hidden {
-            opacity: 0;
-            pointer-events: none;
+            width: 100%; /* Aseguramos que el contenido se ajuste al ancho de la pantalla */
         }
 
         .bienvenida {
-            width: 80%;
+            width: 90%; /* Reduce el ancho del contenedor */
+            max-width: 100%; /* Asegura que no sobrepase el tamaño de la pantalla */
             background-color: rgba(123, 85, 151, 0.75);
             margin: 15px 0;
             border-radius: 15px;
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-        
-        .bienvenida h2{
+
+        .bienvenida h2 {
             text-align: left;
             margin: 0;
-            font-size: small;
+            font-size: 1.1em;
         }
 
-        .hola{
-            width: 70%;
+        .hola {
+            width: 90%;
+            max-width: 100%;
         }
 
         .hola p {
             text-align: center;
-            font-size: medium;
+            font-size: 1.2em;
         }
 
         .lugar {
@@ -91,7 +83,7 @@
         }
 
         .footer {
-            height: 600px; 
+            height: 100px; 
             background-color: none; 
             display: flex;
             justify-content: center;
@@ -102,15 +94,16 @@
         }
 
         .image-container {
-            width: 80%;
+            width: 90%; /* Asegura que las imágenes no sobrepasen el ancho de la pantalla */
             margin: 10px 0;
             position: relative; 
             display: flex;
             justify-content: center;
+            overflow: hidden; /* Para evitar que las imágenes sobresalgan */
         }
 
         .image-container img {
-            width: 100%;
+            width: 100%; /* Asegura que la imagen ocupe todo el ancho disponible */
             height: auto;
             border-radius: 15px;
         }
@@ -122,10 +115,52 @@
             border-radius: 10px;
         }
 
+        /* Media Queries */
         @media (max-width: 768px) {
-            .card {
-                width: 80%;
-                height: 100%;
+            .header {
+                height: 15vh;
+            }
+
+            .header img.logo {
+                max-height: 50%;
+            }
+
+            .bienvenida {
+                width: 95%;
+            }
+
+            .hola p {
+                font-size: 1em;
+            }
+
+            .image-container {
+                width: 95%; /* Aumentamos el tamaño de las imágenes en pantallas pequeñas */
+            }
+
+            .footer {
+                font-size: 12px;
+            }
+
+            .lugar {
+                font-size: 1em;
+            }
+
+            #map {
+                height: 180px; /* Ajustamos el mapa en pantallas pequeñas */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .bienvenida {
+                width: 100%; /* Aseguramos que el contenedor de bienvenida ocupe el 100% en pantallas muy pequeñas */
+            }
+
+            .image-container img {
+                max-height: 180px; /* Ajustamos la altura de las imágenes */
+            }
+
+            .footer {
+                font-size: 10px;
             }
         }
     </style>
@@ -208,6 +243,5 @@
     <script>
         initializeMap(); 
     </script>
-    
 </body>
 </html>
